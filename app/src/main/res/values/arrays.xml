@@ -1,0 +1,10 @@
+<resources>
+    <array name="languages">
+        <item>Русский язык</item>
+        <item>O\'zbek tili</item>
+    </array>
+    <array name="languages_value">
+        <item>ru</item>
+        <item>uz</item>
+    </array>
+</resources>

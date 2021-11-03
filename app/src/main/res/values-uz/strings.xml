@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="unknown">Noma\'lum</string>
+    <string name="address_title">Manzil:</string>
+    <string name="status_title">Holat:</string>
+    <string name="phone_title">Telefon:</string>
+    <string name="inn_title">STIR</string>
+    <string name="amount_title">Raqam:</string>
+    <string name="price_title">Narxi:</string>
+    <string name="all_price_title">Buyurtmaning umumiy miqdori</string>
+    <string name="title_home">Asosiy</string>
+    <string name="title_map">Xarita</string>
+    <string name="title_orders">Ilovalar</string>
+    <string name="som">so\'m</string>
+    <string name="status_new">Yangi</string>
+    <string name="status_canceled">Отменен</string>
+    <string name="status_finished">Bajarildi</string>
+    <string name="payment_transfer">Hisoblash</string>
+    <string name="payment_cash">Naqd pul</string>
+    <string name="payment_terminal">Terminal</string>
+    <string name="create_app_title">Buyurtma yarating</string>
+    <string name="record_title">Suhbat</string>
+    <string name="discussion_history_title">Suhbatlar tarixi</string>
+    <string name="settings_title">Sozlamalar</string>
+</resources>

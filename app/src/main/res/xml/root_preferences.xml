@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--    <PreferenceCategory app:title="Настройки">-->
+
+    <ListPreference
+        app:defaultValue="100"
+        app:entries="@array/languages"
+        app:entryValues="@array/languages_value"
+        app:key="languages_list"
+        app:summary="Утановить язык приложения из предложенных"
+        app:title="Выберите язык" />
+
+    <Preference
+        app:title="Выход"
+        app:key="exit_btn"
+        app:summary="Вы выйдите из приложения"
+        />
+    <!--    </PreferenceCategory>-->
+
+</PreferenceScreen>

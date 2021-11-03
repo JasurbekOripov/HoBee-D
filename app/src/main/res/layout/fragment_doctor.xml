@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.doctor.DoctorFragment"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/doc_avatar"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_full_8"
+                android:backgroundTint="@color/blue"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_image_placeholder"
+                android:tag="image_tag"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/text_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="12dp"
+                android:elevation="0dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/doc_avatar"
+                app:layout_constraintTop_toTopOf="@+id/doc_avatar">
+
+
+                <TextView
+                    android:id="@+id/dc_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:singleLine="true"
+                    android:text="Имя Врача"
+                    android:textColor="@color/darkblue"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Телефон:"
+                    android:textColor="@color/gray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dc_name" />
+
+
+                <TextView
+                    android:id="@+id/dc_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="+998 90 123 45 67"
+                    android:textColor="@color/darkblue"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dc_name" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btn_call"
+                style="@style/OverrideButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_full_8"
+                android:backgroundTint="@color/green"
+                android:drawableLeft="@drawable/ic_call"
+                android:text="Повонить"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/doc_avatar" />
+
+            <TextView
+                android:id="@+id/doc_speciality"
+                style="@style/page_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Специалиация"
+                app:layout_constraintStart_toStartOf="@+id/btn_call"
+                app:layout_constraintTop_toBottomOf="@+id/btn_call" />
+
+            <TextView
+                android:id="@+id/doc_specialization"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="top"
+                android:lineHeight="20sp"
+                android:text="Cgtwbfkmyjcnm 1, Cgtwbfkmyjcnm 2, Cgtwbfkmyjcnm 3"
+                android:textColor="@color/gray"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/doc_speciality"
+                app:layout_constraintTop_toBottomOf="@+id/doc_speciality" />
+
+            <TextView
+                android:id="@+id/about_doc"
+                style="@style/page_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="О докторе"
+                app:layout_constraintStart_toStartOf="@+id/doc_specialization"
+                app:layout_constraintTop_toBottomOf="@+id/doc_specialization" />
+
+            <TextView
+                android:id="@+id/doc_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="top"
+                android:lineHeight="20sp"
+                android:text="Enjoyed minutes related as at on on. Is fanny dried as often me. Goodness as reserved raptures to mistaken steepest oh screened he. Gravity he mr sixteen esteems. Mile home its new way with high told said. Finished no horrible blessing landlord dwelling dissuade if. Rent fond am he in on read. Anxious cordial demands settled entered in do to colonel"
+                android:textColor="@color/gray"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/about_doc"
+                app:layout_constraintTop_toBottomOf="@+id/about_doc" />
+
+
+            <TextView
+                android:id="@+id/advice_price_title"
+                style="@style/page_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Кабинет врача:"
+                app:layout_constraintStart_toStartOf="@+id/doc_description"
+                app:layout_constraintTop_toBottomOf="@+id/doc_description" />
+
+            <TextView
+                android:id="@+id/doc_job_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="top"
+                android:lineHeight="20sp"
+                android:text="1 корпус, 2 этаж, Кабинет № 217"
+                android:textColor="@color/gray"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/advice_price_title"
+                app:layout_constraintTop_toBottomOf="@+id/advice_price_title" />
+
+            <TextView
+                android:id="@+id/advice_discount_title"
+                style="@style/page_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Обеденный перерыв"
+                app:layout_constraintStart_toStartOf="@+id/doc_job_location"
+                app:layout_constraintTop_toBottomOf="@+id/doc_job_location" />
+
+            <TextView
+                android:id="@+id/doc_break"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="top"
+                android:lineHeight="20sp"
+                android:text="С 12:00-13:00"
+                android:textColor="@color/gray"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/advice_discount_title"
+                app:layout_constraintTop_toBottomOf="@+id/advice_discount_title" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/start_discuss"
+            style="@style/OverrideButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/rounded_full_8"
+            app:backgroundTint="@color/blue"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Начать беседу"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</ScrollView>

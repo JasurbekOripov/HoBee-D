@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/to_drugstore"
+            app:destination="@id/drugStoreFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/exit_anim" />
+        <action
+            android:id="@+id/to_hospital_fragment"
+            app:destination="@id/hospitalFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.dashboard.DashboardFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.notifications.ApplicationsFragment"
+        android:label="@string/title_orders"
+        tools:layout="@layout/fragment_applications" >
+        <action
+            android:id="@+id/action_navigation_notifications_to_applicationInfoFragment"
+            app:destination="@id/applicationInfoFragment" />
+        <action
+            android:id="@+id/action_navigation_notifications_to_infoOrderFragment"
+            app:destination="@id/infoOrderFragment" />
+    </fragment>
+
+    <action
+        android:id="@+id/create_settings"
+        app:destination="@id/settingsFragment"
+        app:enterAnim="@anim/enter_anim"
+        app:exitAnim="@anim/exit_anim"
+        app:popEnterAnim="@anim/enter_anim"
+        app:popExitAnim="@anim/exit_anim" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.settings.SettingsFragment"
+        android:label="@string/settings_title"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/drugStoreFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.drugstore.DrugStoreFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_drug_store" >
+        <argument
+            android:name="drugstore_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/to_create_app"
+            app:destination="@id/createApplicationFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/exit_anim" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/hospitalFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.hospital.HospitalFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_hospital" >
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=" "/>
+        <argument
+            android:name="clinic"
+            app:argType="com.glight.hobeedistribuition.network.model.DoctorModel" />
+        <action
+            android:id="@+id/to_discussion_list"
+            app:destination="@id/discussionListFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/exit_anim" />
+        <action
+            android:id="@+id/to_doctor_fragmet"
+            app:destination="@id/doctorFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/discussionListFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.hospital.DiscussionListFragment"
+        android:label="@string/discussion_history_title"
+        tools:layout="@layout/fragment_discussion_list" />
+    <fragment
+        android:id="@+id/doctorFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.doctor.DoctorFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_doctor" >
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=" "/>
+        <action
+            android:id="@+id/to_record_fragmet"
+            app:destination="@id/recordFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/enter_anim"
+            app:popExitAnim="@anim/exit_anim" />
+        <argument
+            android:name="doctor"
+            app:argType="com.glight.hobeedistribuition.network.model.DoctorModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/recordFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.doctor.RecordFragment"
+        android:label="@string/record_title"
+        tools:layout="@layout/fragment_record" >
+        <argument
+            android:name="doctor_id"
+            app:argType="integer" />
+    </fragment>
+    <dialog
+        android:id="@+id/applicationInfoFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.notifications.ApplicationInfoFragment"
+        tools:layout="@layout/fragment_application_info" >
+        <argument
+            android:name="application_info"
+            app:argType="com.glight.hobeedistribuition.network.model.OrderModel" />
+    </dialog>
+    <fragment
+        android:id="@+id/createApplicationFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.drugstore.CreateApplicationFragment"
+        android:label="@string/create_app_title"
+        tools:layout="@layout/fragment_create_application" >
+        <argument
+            android:name="data"
+            app:argType="com.glight.hobeedistribuition.network.model.CreateOrderModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/infoOrderFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.info_orders.InfoOrderFragment"
+        android:label="Заказы"
+        tools:layout="@layout/fragment_info_order" />
+    <fragment
+        android:id="@+id/basketFragment"
+        android:name="uz.glight.hobee.distribuition.ui.fragments.drugstore.BasketFragment"
+        android:label="fragment_basket"
+        tools:layout="@layout/fragment_basket" >
+        <action
+            android:id="@+id/action_basketFragment_to_createApplicationFragment"
+            app:destination="@id/createApplicationFragment" />
+    </fragment>
+</navigation>
