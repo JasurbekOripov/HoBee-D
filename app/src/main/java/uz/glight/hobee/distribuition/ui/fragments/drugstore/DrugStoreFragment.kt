@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.glight.hobeedistribuition.utils.Constants
 import com.google.android.material.tabs.TabLayoutMediator
 import uz.glight.hobee.distribuition.R
+import uz.glight.hobee.distribuition.adapters.DrugsViewPagerAdapter
 import uz.glight.hobee.distribuition.adapters.TabPagesAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentDrugStoreBinding
 import uz.glight.hobee.distribuition.ui.fragments.home.ClinicsFragment
@@ -18,7 +19,7 @@ class DrugStoreFragment : Fragment(R.layout.fragment_drug_store) {
 
     private val viewModel: DrugStoreViewModel by viewModels()
     private var drugStoreBinding: FragmentDrugStoreBinding? = null
-
+lateinit var pagerAdapter:DrugsViewPagerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -27,14 +28,10 @@ class DrugStoreFragment : Fragment(R.layout.fragment_drug_store) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentDrugStoreBinding.bind(view)
         drugStoreBinding = binding
-
-        val pagesAdapter = TabPagesAdapter(
-            childFragmentManager,
-            lifecycle,
-            arrayOf(WarehouseFragment(), BasketFragment())
-        )
+        var id=requireParentFragment().arguments?.getInt("drugstore_id")?:1
+        pagerAdapter= DrugsViewPagerAdapter(id.toString(),childFragmentManager,lifecycle)
         binding.tab
-        binding.pages.adapter = pagesAdapter
+        binding.pages.adapter = pagerAdapter
 
         TabLayoutMediator(binding.tab, binding.pages) { tab, position ->
             tab.text = Constants.DRUGSTORE_TABS[position]

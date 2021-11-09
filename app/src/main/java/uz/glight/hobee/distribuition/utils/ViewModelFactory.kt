@@ -10,7 +10,8 @@ import uz.glight.hobee.distribuition.ui.fragments.home.HomeViewModel
 import kotlin.IllegalArgumentException
 
 class HobeeViewModelFactory(private val repository: RemoteRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
             return HomeViewModel() as T
         } else {

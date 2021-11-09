@@ -22,6 +22,7 @@ import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.databinding.FragmentCreateApplicationBinding
 import uz.glight.hobee.distribuition.network.models.DiscountModel
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
+import uz.glight.hobee.distribuition.room.AppDataBase
 import uz.glight.hobee.ibrogimov.commons.getFragmentTag
 import uz.glight.hobee.ibrogimov.commons.parseError
 
@@ -73,22 +74,21 @@ class CreateApplicationFragment : Fragment(R.layout.fragment_create_application)
             }
             discounts.check(0)
             createOrder.setOnClickListener {
-//                if (binding.discounts.isEnabled) {
                 Log.d(getFragmentTag(), "onViewCreated: $data")
                 corJob.launch {
                     val response = RemoteRepository.createApplication(data)
                     if (response.isSuccessful) {
+                        var dao = AppDataBase.getInstanse(requireContext()).dao()
+                        dao.deleteMedsByWhereHouse(data.listOfDrugs?.get(0)?.id ?: 1)
                         context?.toast("Создан")
-                        CoroutineScope(Dispatchers.IO).launch {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            findNavController().popBackStack()
                         }
                     } else {
                         val errorBody = parseError(response)
                         context?.toast("${errorBody.message} ${errorBody.status}")
                     }
                 }
-//                } else {
-//                    Snackbar.make(view, "Please choose discount", Snackbar.LENGTH_SHORT).show()
-//                }
 
             }
             discounts.setOnCheckedChangeListener { group, checkedId ->

@@ -6,8 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.glight.hobeedistribuition.network.model.OrderModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,6 +33,7 @@ class InfoOrderFragment : Fragment() {
     lateinit var binding: FragmentInfoOrderBinding
     private var param1: OrderModel? = null
     private var param2: String? = null
+    lateinit var viewModel: OrdersItemViewModel
     lateinit var adapter: OrderMedsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,53 +55,61 @@ class InfoOrderFragment : Fragment() {
 
             }
         })
+        binding.rv.adapter = adapter
         loadData()
         return root
     }
 
     private fun loadData() {
         try {
-                var res = RemoteRepository
-                    .getRespons(
-                        "http://83.69.136.134/v1/api/request-agent" +
-                                "-items?request_agent_id=${param1?.id}"
-                    )
-                res.enqueue(object : Callback<List<Item>> {
-                    override fun onResponse(
-                        call: Call<List<Item>>,
-                        response: Response<List<Item>>
-                    ) {
-                        if (response.isSuccessful) {
-                            binding?.apply {
-                                sum.text = param1?.totalPaymentSum
-                                discount.text = param1?.discount
-                                paymentType.text = when (param1?.paymentType) {
-                                    "transfer" -> getString(R.string.payment_transfer)
-                                    "cash" -> getString(R.string.payment_cash)
-                                    "terminal" -> getString(R.string.payment_terminal)
-                                    else -> getString(R.string.unknown)
-                                }
-                            }
-                            adapter.submitList(response.body())
-                        }
+            binding.apply {
+                sum.text = param1?.totalPaymentSum
+                discount.text = param1?.discount
+                paymentType.text = when (param1?.paymentType) {
+                    "transfer" -> getString(R.string.payment_transfer)
+                    "cash" -> getString(R.string.payment_cash)
+                    "terminal" -> getString(R.string.payment_terminal)
+                    else -> getString(R.string.unknown)
+                }
+            }
+            var res = RemoteRepository
+                .getRespons(
+                    "http://83.69.136.134/v1/api/request-agent" +
+                            "-items?request_agent_id=${param1?.id}"
+                )
+            res.enqueue(object : Callback<List<Item>> {
+                override fun onResponse(
+                    call: Call<List<Item>>,
+                    response: Response<List<Item>>
+                ) {
+                    if (response.isSuccessful) {
+                        adapter.submitList(response.body())
+                    } else {
+                        Snackbar.make(view!!, "Error", Snackbar.LENGTH_SHORT).show()
                     }
+                }
 
-                    override fun onFailure(call: Call<List<Item>>, t: Throwable) {
-                        lifecycleScope.launch {
-                            Toast.makeText(
-                                requireContext(),
-                                t.message.toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                override fun onFailure(call: Call<List<Item>>, t: Throwable) {
+                    lifecycleScope.launch {
+                        Toast.makeText(
+                            requireContext(),
+                            t.message.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                })
-            binding.rv.adapter = adapter
+                }
+            })
+//            viewModel.getItems(param1?.id ?: 1).observe(viewLifecycleOwner, {
+//               lifecycleScope.launch {
+////                   adapter.snapshot()
+////                   adapter.submitData(it)
+//                }
+//
+//            })
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
-
 
     companion object {
         @JvmStatic

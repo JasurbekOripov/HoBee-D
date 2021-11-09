@@ -1,12 +1,10 @@
 package uz.glight.hobee.distribuition.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.databinding.CardDrugBinding
 import uz.glight.hobee.distribuition.network.models.Item
 
@@ -42,11 +40,13 @@ class OrderMedsAdapter(var itemClick: setOnClick) :
         return Vh(CardDrugBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: Vh, position: Int) {
-        holder.onBind(getItem(position), position)
-    }
 
     interface setOnClick {
         fun itemClick(item: Item, position: Int)
     }
+
+    override fun onBindViewHolder(holder: Vh, position: Int) {
+        getItem(position)?.let { holder.onBind(it, position) }
+    }
+
 }

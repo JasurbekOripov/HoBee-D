@@ -8,6 +8,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.*
+import retrofit2.http.Query
 import uz.glight.hobee.distribuition.network.api.RetrofitBuilder
 import uz.glight.hobee.distribuition.network.models.ClinicModel
 import uz.glight.hobee.distribuition.network.models.DiscountModel
@@ -21,9 +22,10 @@ object RemoteRepository {
         ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)?.accessToken
     private var service = RetrofitBuilder.apiService(null)
 
-    fun setService(token: String){
+    fun setService(token: String) {
         service = RetrofitBuilder.apiService(token)
     }
+
     fun parseError(response: Response<*>): ErrorModel {
         val gson = Gson()
         val type = object : TypeToken<ErrorModel>() {}.type
@@ -101,7 +103,7 @@ object RemoteRepository {
         return service.createOrder(data)
     }
 
-     fun getRespons(url:String): Call<List<Item>> {
+    fun getRespons(url: String): Call<List<Item>> {
         return service.getRequests(url)
     }
 
