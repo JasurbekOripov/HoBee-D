@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".App"
@@ -20,17 +20,26 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <service android:name=".services.record.RecordService"/>
+        <service android:name=".services.record.RecordService" />
+        <receiver
+            android:name=".services.NetworkChangeListener"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <activity
-            android:screenOrientation="portrait"
             android:name=".ui.activities.BottomNavigationActivity"
-            android:label="@string/title_main"/>
+            android:label="@string/title_main"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".ui.activities.LoginActivity"
-            android:label="@string/title_main"/>
-        <activity android:name=".ui.activities.SplashScreen"
+            android:label="@string/title_main"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activities.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

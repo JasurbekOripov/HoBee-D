@@ -53,7 +53,8 @@ class PharmacyFragment : Fragment(R.layout.fragment_pharmacy) {
         if (networkHelper.isNetworkConnected()) {
             loadData()
         } else {
-            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+            Snackbar.make(bindingPharmacy?.listView!!, "No internet connection", Snackbar.LENGTH_SHORT)
+                .show()
         }
     }
 

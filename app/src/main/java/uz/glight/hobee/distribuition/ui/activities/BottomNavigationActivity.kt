@@ -1,6 +1,9 @@
 package uz.glight.hobee.distribuition.ui.activities
 
+import android.content.BroadcastReceiver
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,10 +24,12 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
+import uz.glight.hobee.distribuition.services.NetworkChangeListener
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import java.lang.Exception
 
 class BottomNavigationActivity : AppCompatActivity() {
-
+    val br: BroadcastReceiver = NetworkChangeListener()
     // App Bar configuration
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -39,7 +44,10 @@ class BottomNavigationActivity : AppCompatActivity() {
         } else {
             Snackbar.make(toolbar, "No internet connection", Snackbar.LENGTH_SHORT).show()
         }
-
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
+            addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+        }
+        registerReceiver(br, filter)
         setSupportActionBar(toolbar)
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -56,27 +64,38 @@ class BottomNavigationActivity : AppCompatActivity() {
          * Hide bottom navigation view
          * if current destination under the top
          */
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            lifecycleScope.launch {
-                var res = RemoteRepository.getDiscounts()
-                if (res.code() > 400) {
-                    Snackbar.make(
-                        navView,
-                        "You access is failed , please re-enter again",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                    val la = Intent(applicationContext, LoginActivity::class.java)
-                    la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(la)
-                    finish()
-                }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (NetworkHelper(applicationContext).isNetworkConnected()) {
+                lifecycleScope.launch {
+                    try {
+                        var res = RemoteRepository.getDiscounts()
+                        if (res.code() > 400) {
+                            Snackbar.make(
+                                navView,
+                                "You access is failed , please re-enter again",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            val la = Intent(applicationContext, LoginActivity::class.java)
+                            la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(la)
+                            finish()
+                        }
+                    }catch (e:Exception){
+                        Snackbar.make(navView, "No internet connection", Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
 
-            }
-            if (destination.id == R.id.navigation_home || destination.id == R.id.navigation_notifications || destination.id == R.id.navigation_dashboard || destination.id == R.id.settingsFragment) {
-                navView.visibility = View.VISIBLE
+                }
+                if (destination.id == R.id.navigation_home || destination.id == R.id.navigation_notifications || destination.id == R.id.navigation_dashboard || destination.id == R.id.settingsFragment) {
+                    navView.visibility = View.VISIBLE
+                } else {
+                    navView.visibility = View.GONE
+                }
             } else {
-                navView.visibility = View.GONE
+                Snackbar.make(navView, "No internet connection", Snackbar.LENGTH_SHORT)
+                    .show()
             }
+
         }
     }
 

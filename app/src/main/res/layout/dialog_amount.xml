@@ -31,9 +31,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
+
             android:id="@+id/amout_of_drug"
             android:layout_width="175dp"
-            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginTop="16dp"
             android:ems="10"
             android:inputType="number"
