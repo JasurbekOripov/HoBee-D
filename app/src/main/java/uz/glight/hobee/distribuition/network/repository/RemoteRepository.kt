@@ -59,12 +59,12 @@ object RemoteRepository {
         return response
     }
 
-    suspend fun getClinic(query: String,page:Int): Response<List<ClinicModel>> {
-        return service.getClinics(query,page)
+    suspend fun getClinic(query: String, page: Int): Response<List<ClinicModel>> {
+        return service.getClinics(query, page)
     }
 
-    suspend fun getPharmacy(query: String,page:Int): Response<List<ClinicModel>> {
-        return service.getPharmacy(query,page)
+    suspend fun getPharmacy(query: String, limit: Int, page: Int): Response<List<ClinicModel>> {
+        return service.getPharmacy(query, limit, page)
     }
 
 
@@ -72,16 +72,20 @@ object RemoteRepository {
         return service.getDiscount()
     }
 
-    suspend fun getWarehouse(page:Int,str:String): Response<List<DrugModel>> {
-        return service.getWarehouse(page = page,query = str)
+    suspend fun getWarehouse(page: Int, str: String): Response<List<DrugModel>> {
+        return service.getWarehouse(page = page, query = str)
     }
 
 
-    suspend fun getDoctors(clinic_id: String, page:Int,name: String = ""): Response<List<DoctorModel>> {
-        return service.getDoctors(clinic_id, page,name)
+    suspend fun getDoctors(
+        clinic_id: String,
+        page: Int,
+        name: String = ""
+    ): Response<List<DoctorModel>> {
+        return service.getDoctors(clinic_id, page, name)
     }
 
-    suspend fun getDiscussionList(page:Int): Response<List<DiscussionModel>> {
+    suspend fun getDiscussionList(page: Int): Response<List<DiscussionModel>> {
         return service.getDiscussionList(page)
     }
 

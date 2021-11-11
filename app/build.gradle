@@ -100,4 +100,7 @@ dependencies {
     implementation 'androidx.paging:paging-runtime-ktx:3.0.1'
     //RxJava
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+
+    //yandex map
+    implementation 'com.yandex.android:mapkit:3.5.0'
 }

@@ -12,5 +12,10 @@ data class ClinicModel(
     @SerializedName("address")
     val address: String?,
     @SerializedName("reception_phone")
-    val receptionPhone: String?
+    val receptionPhone: String?,
+    var latitude: Double,
+    var longitude: Double,
+    var status: String = "",
+    var statusText: String = "",
+    var remainingPayment: Long
 ) : Serializable

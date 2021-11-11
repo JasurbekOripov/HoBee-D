@@ -1,5 +1,6 @@
 package uz.glight.hobee.distribuition.ui.fragments.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,6 +21,8 @@ import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.adapters.TabPagesAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentHomeBinding
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
+import uz.glight.hobee.distribuition.ui.activities.BottomNavigationActivity
+import uz.glight.hobee.distribuition.ui.activities.LoginActivity
 import uz.glight.hobee.distribuition.utils.NetworkHelper
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -74,7 +77,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     homeViewModel.getClinic("", viewLifecycleOwner)
                 }
             } else {
-                view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+                view?.let {
+                    Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show()
+                }
             }
 
             false;
@@ -87,6 +92,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                lifecycleScope.launch {
+                    var res = RemoteRepository.getDiscounts()
+                    if (res.code() > 400) {
+                        Snackbar.make(
+                            view!!,
+                            "You access is failed , please re-enter again",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        val la = Intent(requireContext(), LoginActivity::class.java)
+                        la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(la)
+                        BottomNavigationActivity().finish()
+                    }
+                }
                 if (newText != null) {
                     if (networkHelper.isNetworkConnected()) {
                         if (bindingHome?.tab?.selectedTabPosition == 0) {
@@ -95,7 +114,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             homeViewModel.getClinic(newText, viewLifecycleOwner)
                         }
                     } else {
-                        view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+                        view?.let {
+                            Snackbar.make(
+                                it,
+                                "No internet connection",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
                     }
 
                 }

@@ -59,7 +59,7 @@ interface HobeeAPI {
 
     @GET("request-agent")
     suspend fun getApplicationsList(
-        @Query("page") page: Int ,
+        @Query("page") page: Int,
         @Query("per-page") perPage: Int = 30,
     ): Response<List<OrderModel>>                                                //ready
 
@@ -81,13 +81,14 @@ interface HobeeAPI {
     suspend fun getClinics(
         // @Header("Authorization") auth: String,
         @Query("name") query: String?,
-        @Query("page") page:Int
+        @Query("page") page: Int
     ): Response<List<ClinicModel>>                                                  //ready
 
 
     @GET("pharmacy")
     suspend fun getPharmacy(
         @Query("name") query: String?,
+        @Query("per-page") limit: Int? = 30,
         @Query("page") page: Int?
     ): Response<List<ClinicModel>>                                                  //ready
 

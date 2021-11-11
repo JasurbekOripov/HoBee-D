@@ -16,7 +16,7 @@ class PharmacySource(var name: String) : PagingSource<Int, ClinicModel>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ClinicModel> {
         if (totalPage == -1 || totalPage > pageNumber) {
             pageNumber = params.key ?: 1
-            var res = RemoteRepository.getPharmacy(name, pageNumber)
+            var res = RemoteRepository.getPharmacy(name,30, pageNumber)
             var headers = res.headers()
             if (totalPage == -1) {
                 for (i in headers) {

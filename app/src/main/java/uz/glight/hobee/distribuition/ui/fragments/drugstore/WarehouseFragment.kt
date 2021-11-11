@@ -1,5 +1,6 @@
 package uz.glight.hobee.distribuition.ui.fragments.drugstore
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -15,8 +16,11 @@ import kotlinx.coroutines.launch
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.adapters.WareHouseAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentWarehouseBinding
+import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.room.AppDataBase
 import uz.glight.hobee.distribuition.room.entity.SavedMedEntity
+import uz.glight.hobee.distribuition.ui.activities.BottomNavigationActivity
+import uz.glight.hobee.distribuition.ui.activities.LoginActivity
 import uz.glight.hobee.distribuition.ui.fragments.drugstore.dialogs.AmountDialog
 import uz.glight.hobee.distribuition.ui.fragments.drugstore.dialogs.PositiveNegativeCallback
 import uz.glight.hobee.distribuition.utils.NetworkHelper
@@ -89,6 +93,20 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
+                lifecycleScope.launch {
+                    var res = RemoteRepository.getDiscounts()
+                    if (res.code() > 400) {
+                        Snackbar.make(
+                            view!!,
+                            "You access is failed , please re-enter again",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        val la = Intent(requireContext(), LoginActivity::class.java)
+                        la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(la)
+                        BottomNavigationActivity().finish()
+                    }
+                }
                 if (query != null) {
                     var cTime = System.currentTimeMillis()
                     if (cTime - intervall > 400) {

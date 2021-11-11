@@ -1,5 +1,6 @@
 package uz.glight.hobee.distribuition.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -56,6 +57,21 @@ class BottomNavigationActivity : AppCompatActivity() {
          * if current destination under the top
          */
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            lifecycleScope.launch {
+                var res = RemoteRepository.getDiscounts()
+                if (res.code() > 400) {
+                    Snackbar.make(
+                        navView,
+                        "You access is failed , please re-enter again",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    val la = Intent(applicationContext, LoginActivity::class.java)
+                    la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(la)
+                    finish()
+                }
+
+            }
             if (destination.id == R.id.navigation_home || destination.id == R.id.navigation_notifications || destination.id == R.id.navigation_dashboard || destination.id == R.id.settingsFragment) {
                 navView.visibility = View.VISIBLE
             } else {
