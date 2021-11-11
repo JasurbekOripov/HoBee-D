@@ -38,9 +38,9 @@ object ViewHolderFactory {
             data: OrderModel,
             listener: OnItemClickListener<OrderModel>?
         ) {
-            title.text = data.pharmacy.name ?: ""
-            address.text = data.pharmacy.address
-            phone.text = data.pharmacy.receptionPhone
+            title.text = data.pharmacy?.name ?: ""
+            address.text = data.pharmacy?.address
+            phone.text = data.pharmacy?.receptionPhone
 
             totalSum.text = "${data.totalPaymentSum} ${itemView.context.getString(R.string.som)}"
             when(data.status){
@@ -96,6 +96,7 @@ object ViewHolderFactory {
             time.text = dateTime[1] ?: ""
         }
     }
+
 
     class DoctorsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         ItemsListAdapter.Binder<DoctorModel> {

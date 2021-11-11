@@ -5,25 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import com.glight.hobeedistribuition.network.model.OrderModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.adapters.OrderMedsAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentInfoOrderBinding
 import uz.glight.hobee.distribuition.network.models.Item
-import uz.glight.hobee.distribuition.network.repository.RemoteRepository
-import uz.glight.hobee.distribuition.ui.activities.BottomNavigationActivity
+import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.viewmodels.OrderItemsViewModel
 import java.lang.Exception
 
 private const val ARG_PARAM1 = "data"
@@ -33,7 +23,6 @@ class InfoOrderFragment : Fragment() {
     lateinit var binding: FragmentInfoOrderBinding
     private var param1: OrderModel? = null
     private var param2: String? = null
-    lateinit var viewModel: OrdersItemViewModel
     lateinit var adapter: OrderMedsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +45,11 @@ class InfoOrderFragment : Fragment() {
             }
         })
         binding.rv.adapter = adapter
-        loadData()
+        if (NetworkHelper(requireContext()).isNetworkConnected()) {
+            loadData()
+        } else {
+            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+        }
         return root
     }
 
@@ -72,40 +65,10 @@ class InfoOrderFragment : Fragment() {
                     else -> getString(R.string.unknown)
                 }
             }
-            var res = RemoteRepository
-                .getRespons(
-                    "http://83.69.136.134/v1/api/request-agent" +
-                            "-items?request_agent_id=${param1?.id}"
-                )
-            res.enqueue(object : Callback<List<Item>> {
-                override fun onResponse(
-                    call: Call<List<Item>>,
-                    response: Response<List<Item>>
-                ) {
-                    if (response.isSuccessful) {
-                        adapter.submitList(response.body())
-                    } else {
-                        Snackbar.make(view!!, "Error", Snackbar.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<List<Item>>, t: Throwable) {
-                    lifecycleScope.launch {
-                        Toast.makeText(
-                            requireContext(),
-                            t.message.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+            var viewmodel = ViewModelProvider(this)[OrderItemsViewModel::class.java]
+            viewmodel.getData(param1?.id ?: 1).observe(viewLifecycleOwner, {
+                adapter.submitData(lifecycle, it)
             })
-//            viewModel.getItems(param1?.id ?: 1).observe(viewLifecycleOwner, {
-//               lifecycleScope.launch {
-////                   adapter.snapshot()
-////                   adapter.submitData(it)
-//                }
-//
-//            })
         } catch (e: Exception) {
             e.printStackTrace()
         }

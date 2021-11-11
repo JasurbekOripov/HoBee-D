@@ -5,23 +5,11 @@ import android.security.identity.ResultData
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
+import android.widget.TextView
 import com.glight.hobeedistribuition.network.model.OrderModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.awaitResponse
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.databinding.FragmentApplicationInfoBinding
-import uz.glight.hobee.distribuition.network.models.Item
-import uz.glight.hobee.distribuition.network.models.RequestData
-import uz.glight.hobee.distribuition.network.repository.RemoteRepository
-import java.lang.Exception
 
 class ApplicationInfoFragment : BottomSheetDialogFragment() {
 

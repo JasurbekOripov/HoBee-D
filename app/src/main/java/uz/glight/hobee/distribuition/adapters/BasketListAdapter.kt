@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.glight.hobee.distribuition.databinding.CardBacketItemBinding
 import uz.glight.hobee.distribuition.room.entity.SavedMedEntity
 
-class BasketListAdapter : ListAdapter<SavedMedEntity, BasketListAdapter.Vh>(MyDiffUtil()) {
+class BasketListAdapter(var onClick: setOnClick) :
+    ListAdapter<SavedMedEntity, BasketListAdapter.Vh>(MyDiffUtil()) {
     inner class Vh(var itemBinding: CardBacketItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun onBind(data: SavedMedEntity, position: Int) {
@@ -17,6 +18,9 @@ class BasketListAdapter : ListAdapter<SavedMedEntity, BasketListAdapter.Vh>(MyDi
                 price.text = data.priceForOne
                 amount.text = data.amount.toString()
                 amountPrice.text = data.allPrice.toString()
+            }
+            itemBinding.root.setOnClickListener {
+                onClick.itemClicked(data, position)
             }
         }
     }
@@ -39,5 +43,9 @@ class BasketListAdapter : ListAdapter<SavedMedEntity, BasketListAdapter.Vh>(MyDi
 
     override fun onBindViewHolder(holder: Vh, position: Int) {
         holder.onBind(getItem(position), position)
+    }
+
+    interface setOnClick {
+        fun itemClicked(savedMedEntity: SavedMedEntity, position: Int)
     }
 }

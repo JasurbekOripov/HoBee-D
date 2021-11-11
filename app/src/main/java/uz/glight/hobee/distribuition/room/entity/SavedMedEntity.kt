@@ -13,4 +13,4 @@ data class SavedMedEntity(
     var name: String,
     var priceForOne: String,
     var amount: Int,
-    var allPrice: Double)
+    var allPrice: Long)

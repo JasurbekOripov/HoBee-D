@@ -3,9 +3,7 @@ package uz.glight.hobee.distribuition.ui.fragments.drugstore
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -13,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.glight.hobeedistribuition.network.model.CreateOrderModel
 import com.glight.hobeedistribuition.utils.ArrayListUtils
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.ulugbek.ibragimovhelpers.helpers.commons.toast
@@ -23,6 +20,7 @@ import uz.glight.hobee.distribuition.databinding.FragmentCreateApplicationBindin
 import uz.glight.hobee.distribuition.network.models.DiscountModel
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.room.AppDataBase
+import uz.glight.hobee.distribuition.utils.NetworkHelper
 import uz.glight.hobee.ibrogimov.commons.getFragmentTag
 import uz.glight.hobee.ibrogimov.commons.parseError
 
@@ -31,6 +29,7 @@ class CreateApplicationFragment : Fragment(R.layout.fragment_create_application)
     private var createAppBinding: FragmentCreateApplicationBinding? = null
     private lateinit var corJob: CoroutineScope
     private lateinit var data: CreateOrderModel
+    var id: Int? = 0
     private var discountsList =
         MutableLiveData<List<DiscountModel>>(listOf(DiscountModel(0, "0", "0", 0, "0", 0, null, 0)))
 
@@ -38,35 +37,40 @@ class CreateApplicationFragment : Fragment(R.layout.fragment_create_application)
         super.onCreate(savedInstanceState)
         requireArguments().apply {
             data = getSerializable("data") as CreateOrderModel
+            id = getInt("id", 0)
         }
         corJob = CoroutineScope(Job() + Dispatchers.IO)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        corJob.launch {
-            val response = RemoteRepository.getDiscounts()
-            if (response.isSuccessful) {
-                withContext(Dispatchers.Main) {
-                    discountsList.value =
-                        ArrayListUtils.merge(discountsList.value!!, response.body()!!)
-                }
-            }
-        }
         val binding = FragmentCreateApplicationBinding.bind(view)
         createAppBinding = binding
+        if (NetworkHelper(requireContext()).isNetworkConnected()) {
+            corJob.launch {
+                val response = RemoteRepository.getDiscounts()
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) {
+                        discountsList.value =
+                            ArrayListUtils.merge(discountsList.value!!, response.body()!!)
+                    }
+                }
+            }
+        } else {
+            Snackbar.make(view, "No internet connection", Snackbar.LENGTH_SHORT).show()
+        }
         createAppBinding?.apply {
             cartAllPrice.text = data.generalPrice
-            var payment = "cash"
+            data.paymentType = "cash"
             paymentType.setOnCheckedChangeListener { radioGroup, i ->
-                payment = when (i) {
+                data.paymentType  = when (i) {
                     R.id.cash -> "cash"
                     R.id.terminal -> "terminal"
                     R.id.transfer -> "transfer"
                     else -> "cash"
                 }
             }
-            data.paymentType = payment
+
             data.sale = "0.0"
             data.prepayment = "0.0"
             closeModal.setOnClickListener {
@@ -74,21 +78,26 @@ class CreateApplicationFragment : Fragment(R.layout.fragment_create_application)
             }
             discounts.check(0)
             createOrder.setOnClickListener {
-                Log.d(getFragmentTag(), "onViewCreated: $data")
-                corJob.launch {
-                    val response = RemoteRepository.createApplication(data)
-                    if (response.isSuccessful) {
-                        var dao = AppDataBase.getInstanse(requireContext()).dao()
-                        dao.deleteMedsByWhereHouse(data.listOfDrugs?.get(0)?.id ?: 1)
-                        context?.toast("Создан")
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            findNavController().popBackStack()
+                if (NetworkHelper(requireContext()).isNetworkConnected()) {
+                    Log.d(getFragmentTag(), "onViewCreated: $data")
+                    corJob.launch {
+                        val response = RemoteRepository.createApplication(data)
+                        if (response.isSuccessful) {
+                            var dao = AppDataBase.getInstanse(requireContext()).dao()
+                            dao.deleteMedsbyPharmId(id ?: 0)
+                            context?.toast("Создан")
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                findNavController().popBackStack()
+                            }
+                        } else {
+                            val errorBody = parseError(response)
+                            context?.toast("${errorBody.message} ${errorBody.status}")
                         }
-                    } else {
-                        val errorBody = parseError(response)
-                        context?.toast("${errorBody.message} ${errorBody.status}")
                     }
+                } else {
+                    Snackbar.make(view, "No internet connection", Snackbar.LENGTH_SHORT).show()
                 }
+
 
             }
             discounts.setOnCheckedChangeListener { group, checkedId ->
@@ -98,6 +107,7 @@ class CreateApplicationFragment : Fragment(R.layout.fragment_create_application)
                 data.prepayment = disPrepInfo.get(1)
             }
         }
+
 
         discountsList.observe(viewLifecycleOwner, chipObservable)
     }

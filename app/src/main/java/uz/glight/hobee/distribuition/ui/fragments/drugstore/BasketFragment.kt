@@ -5,20 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.glight.hobeedistribuition.network.model.CreateOrderModel
 import com.glight.hobeedistribuition.network.model.UserModel
 import com.glight.hobeedistribuition.utils.ModelPreferencesManager
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.annotations.SerializedName
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.adapters.BasketListAdapter
 import uz.glight.hobee.distribuition.adapters.ItemsListAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentBasketBinding
 import uz.glight.hobee.distribuition.room.AppDataBase
+import uz.glight.hobee.distribuition.room.entity.SavedMedEntity
 import uz.glight.hobee.distribuition.ui.fragments.drugstore.dialogs.CreateApplicationDialog
-import uz.glight.hobee.ibrogimov.commons.getFragmentTag
+import uz.glight.hobee.distribuition.utils.NetworkHelper
 import java.lang.Exception
 
 class BasketFragment : Fragment(R.layout.fragment_basket) {
@@ -28,7 +27,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
     private var param2: String? = null
     private lateinit var adapter: BasketListAdapter
     private var bindingBasket: FragmentBasketBinding? = null
-    private val viewModel: DrugStoreViewModel by viewModels({ requireParentFragment() })
+//    private val viewModel: DrugStoreViewModel by viewModels({ requireParentFragment() })
     private lateinit var dialog: CreateApplicationDialog
     private lateinit var binding: FragmentBasketBinding
     lateinit var db: AppDataBase
@@ -51,12 +50,21 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
 
     private fun loadData() {
         val parentArgs = requireParentFragment().arguments
+        var where_house_id = parentArgs?.getInt("drugstore_id") ?: 0
+        var list = db.dao().getMedsBySavedId(where_house_id) as ArrayList
+
         val userData =
             ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
-        adapter = BasketListAdapter()
+        adapter = BasketListAdapter(object : BasketListAdapter.setOnClick {
+            override fun itemClicked(savedMedEntity: SavedMedEntity, position: Int) {
+                db.dao().deleteMedsbySavedId(savedMedEntity.saved_med_id)
+                adapter.notifyItemRemoved(position)
+                list.remove(savedMedEntity)
+                adapter.notifyItemRangeRemoved(position, list.size)
+                Snackbar.make(view!!,"${savedMedEntity.name} is deleted",Snackbar.LENGTH_SHORT).show()
+            }
+        })
         binding.listView.adapter = adapter
-        var where_house_id = parentArgs?.getInt("drugstore_id") ?: 0
-        var list = db.dao().getMedsByWhereHouse(where_house_id)
         adapter.submitList(list)
         var listOfDrugs = ArrayList<CreateOrderModel.DrugsListItem>()
         var allPrice = 0.0
@@ -67,10 +75,10 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
                     CreateOrderModel.DrugsListItem(
                         name = i.name,
                         warehouseId = i.warehouseId,
-                        id = i.pharmacy_id,
+                        id = i.med_id,
                         priceForOne = i.priceForOne,
                         amount = i.amount,
-                        allPrice = i.allPrice
+                        allPrice = i.allPrice as Long
                     )
                 )
             }
@@ -91,7 +99,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
                 findNavController().popBackStack()
                 findNavController().navigate(
                     R.id.createApplicationFragment,
-                    bundleOf("data" to createData)
+                    bundleOf("data" to createData, "id" to where_house_id)
                 )
             } else {
                 Snackbar.make(
@@ -111,20 +119,24 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
 
     override fun onResume() {
         super.onResume()
-        loadData()
-        viewModel.datamodelBasket.observe(requireParentFragment().viewLifecycleOwner, dataRetriever)
+        if (NetworkHelper(requireContext()).isNetworkConnected()) {
+            loadData()
+        } else {
+            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+        }
+//        viewModel.datamodelBasket.observe(requireParentFragment().viewLifecycleOwner, dataRetriever)
     }
 
-    override fun onPause() {
-        viewModel.datamodelBasket.removeObserver(dataRetriever)
-        super.onPause()
-    }
+//    override fun onPause() {
+//        viewModel.datamodelBasket.removeObserver(dataRetriever)
+//        super.onPause()
+//    }
 
-    private val dataRetriever = Observer<List<CreateOrderModel.DrugsListItem>> {
-
-//            it as List<CreateOrderModel.DrugsListItem>
-
-    }
+//    private val dataRetriever = Observer<List<CreateOrderModel.DrugsListItem>> {
+//
+////            it as List<CreateOrderModel.DrugsListItem>
+//
+//    }
 
     companion object {
         @JvmStatic

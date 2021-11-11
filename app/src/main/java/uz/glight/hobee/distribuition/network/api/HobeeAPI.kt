@@ -18,12 +18,6 @@ import uz.glight.hobee.distribuition.network.models.Item
 
 interface HobeeAPI {
 
-    @Multipart
-    @POST("doctors/discussion")
-    suspend fun sendRecord(
-        @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>
-    ): Response<UploadedFileResponse>
-
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     //No Pagination
@@ -36,58 +30,66 @@ interface HobeeAPI {
         @Body clinicName: CreateOrderModel
     ): Response<CreatedResponseModel>
 
+
+    @Multipart
+    @POST("doctors/discussion")
+    suspend fun sendRecord(
+        @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>
+    ): Response<UploadedFileResponse>
+
     /////////////////////////////////////////////////////////////////////////////////////////////
-    @GET
-    fun getRequests(@Url url: String): Call<List<Item>>//ready
 
     //Pagination
+    @GET
+    suspend fun getRequests(@Url url: String): Response<List<Item>>              //ready
 
     @GET("warehouse")
     suspend fun getWarehouse(
         // @Header("Authorization") auth: String,
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("per-page") perPage: Int = 25,
-        @Query("search") query: String = ""
-    ): Response<List<DrugModel>>
+        @Query("search") query: String
+    ): Response<List<DrugModel>>                                                 //ready
 
     @GET("discussions")
     suspend fun getDiscussionList(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("per-page") perPage: Int = 25,
-    ): Response<List<DiscussionModel>>
+    ): Response<List<DiscussionModel>>                                           //ready
 
     @GET("request-agent")
     suspend fun getApplicationsList(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int ,
         @Query("per-page") perPage: Int = 30,
-    ): Response<List<OrderModel>>
+    ): Response<List<OrderModel>>                                                //ready
 
 
     @GET("prepayment-discount")
-    suspend fun getDiscount(): Response<List<DiscountModel>>
-
-
-    @GET("clinic")
-    suspend fun getClinics(
-        // @Header("Authorization") auth: String,
-        @Query("name") query: String?,
-        @Query("page") page: Int = 1
-    ): Response<List<ClinicModel>>
+    suspend fun getDiscount(): Response<List<DiscountModel>>                        //ready
 
 
     @GET("doctors")
     suspend fun getDoctors(
         // @Header("Authorization") auth: String,
         @Query("clinic") clinic_id: String,
+        @Query("page") page: Int,
         @Query("fullname") doctorName: String?
+    ): Response<List<DoctorModel>>                                                  //ready
 
-    ): Response<List<DoctorModel>>
+
+    @GET("clinic")
+    suspend fun getClinics(
+        // @Header("Authorization") auth: String,
+        @Query("name") query: String?,
+        @Query("page") page:Int
+    ): Response<List<ClinicModel>>                                                  //ready
 
 
     @GET("pharmacy")
     suspend fun getPharmacy(
-        @Query("name") query: String?
-    ): Response<List<ClinicModel>>
+        @Query("name") query: String?,
+        @Query("page") page: Int?
+    ): Response<List<ClinicModel>>                                                  //ready
 
 }
 

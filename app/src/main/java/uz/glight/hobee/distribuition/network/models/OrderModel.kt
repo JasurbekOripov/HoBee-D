@@ -8,7 +8,7 @@ data class OrderModel(
     @SerializedName("id")
     val id: Int,
     @SerializedName("pharmacy")
-    val pharmacy: Pharmacy,
+    val pharmacy: Pharmacy?=Pharmacy(),
     @SerializedName("agent")
     val agent: Agent,
     @SerializedName("discount")
@@ -41,11 +41,11 @@ data class OrderModel(
 ) : Serializable {
     data class Pharmacy(
         @SerializedName("name")
-        val name: String,
+        val name: String?="",
         @SerializedName("address")
-        val address: String,
+        val address: String?="",
         @SerializedName("reception_phone")
-        val receptionPhone: String
+        val receptionPhone: String?=""
     ) : Serializable
 
     data class Agent(

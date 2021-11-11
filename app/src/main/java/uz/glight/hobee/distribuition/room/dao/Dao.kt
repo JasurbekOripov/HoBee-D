@@ -11,10 +11,13 @@ interface Dao {
     fun add(savedMedEntity: SavedMedEntity)
 
     @Query("select * from saved_meds where pharmacy_id=:pharmacy_id")
-    fun getMedsByWhereHouse(pharmacy_id: Int): List<SavedMedEntity>
+    fun getMedsBySavedId(pharmacy_id: Int): List<SavedMedEntity>
 
     @Query("delete from saved_meds where pharmacy_id=:pharmacy_id")
-    fun deleteMedsByWhereHouse(pharmacy_id: Int)
+    fun deleteMedsbyPharmId(pharmacy_id: Int)
+
+    @Query("delete from saved_meds where saved_med_id=:savedId")
+    fun deleteMedsbySavedId(savedId: Int)
 
     @Query("delete from saved_meds")
     fun clearDb()

@@ -96,4 +96,8 @@ dependencies {
     //noinspection GradleDependency
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    //Paging
+    implementation 'androidx.paging:paging-runtime-ktx:3.0.1'
+    //RxJava
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
 }

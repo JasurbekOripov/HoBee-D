@@ -59,40 +59,40 @@ object RemoteRepository {
         return response
     }
 
-    suspend fun getClinic(query: String): Response<List<ClinicModel>> {
-        return service.getClinics(query)
+    suspend fun getClinic(query: String,page:Int): Response<List<ClinicModel>> {
+        return service.getClinics(query,page)
     }
 
-    suspend fun getPharmacy(query: String): Response<List<ClinicModel>> {
-        return service.getPharmacy(query)
+    suspend fun getPharmacy(query: String,page:Int): Response<List<ClinicModel>> {
+        return service.getPharmacy(query,page)
     }
 
-    suspend fun getClinic(): Response<List<ClinicModel>> {
-        return service.getClinics(null)
-    }
+//    suspend fun getClinic(): Response<List<ClinicModel>> {
+//        return service.getClinics(null)
+//    }
 
-    suspend fun getPharmacy(): Response<List<ClinicModel>> {
-        return service.getPharmacy(null)
-    }
+//    suspend fun getPharmacy(): Response<List<ClinicModel>> {
+//        return service.getPharmacy(null)
+//    }
 
-    suspend fun getDiscounts(): Response<List<DiscountModel>> {
+    suspend fun getDiscounts(/*page:Int*/): Response<List<DiscountModel>> {
         return service.getDiscount()
     }
 
-    suspend fun getWarehouse(): Response<List<DrugModel>> {
-        return service.getWarehouse()
+    suspend fun getWarehouse(page:Int,str:String): Response<List<DrugModel>> {
+        return service.getWarehouse(page = page,query = str)
     }
 
-    suspend fun getWarehouse(query: String): Response<List<DrugModel>> {
-        return service.getWarehouse(query = query)
+//    suspend fun getWarehouse(query: String): Response<List<DrugModel>> {
+//        return service.getWarehouse(query = query)
+//    }
+
+    suspend fun getDoctors(clinic_id: String, page:Int,name: String = ""): Response<List<DoctorModel>> {
+        return service.getDoctors(clinic_id, page,name)
     }
 
-    suspend fun getDoctors(clinic_id: String, name: String = ""): Response<List<DoctorModel>> {
-        return service.getDoctors(clinic_id, name)
-    }
-
-    suspend fun getDiscussionList(): Response<List<DiscussionModel>> {
-        return service.getDiscussionList()
+    suspend fun getDiscussionList(page:Int): Response<List<DiscussionModel>> {
+        return service.getDiscussionList(page)
     }
 
     suspend fun getApplicationsList(page: Int): Response<List<OrderModel>> {
@@ -103,7 +103,7 @@ object RemoteRepository {
         return service.createOrder(data)
     }
 
-    fun getRespons(url: String): Call<List<Item>> {
+    suspend fun getRespons(url: String): Response<List<Item>> {
         return service.getRequests(url)
     }
 

@@ -13,23 +13,23 @@ import uz.glight.hobee.ibrogimov.commons.ViewState
 import uz.glight.hobee.ibrogimov.commons.parseError
 
 class ApplicationsViewModel : ViewModel() {
-
-    private val _applicationsState = MutableLiveData<ViewState>(
-        ViewState.Success<List<OrderModel>>(
-            emptyList()
-        )
-    )
-    val applicationsState: LiveData<ViewState> = _applicationsState
-
-    fun getApplications(page: Int){
-        viewModelScope.launch {
-            _applicationsState.postValue(ViewState.Loading)
-            val response = RemoteRepository.getApplicationsList(page)
-            if (response.isSuccessful){
-                _applicationsState.postValue(ViewState.Success<List<OrderModel>>(response.body()!!))
-            } else {
-                _applicationsState.postValue(ViewState.Error<ErrorModel>(parseError(response)))
-            }
-        }
-    }
+//
+//    private val _applicationsState = MutableLiveData<ViewState>(
+//        ViewState.Success<List<OrderModel>>(
+//            emptyList()
+//        )
+//    )
+//    val applicationsState: LiveData<ViewState> = _applicationsState
+//
+//    fun getApplications(page: Int){
+//        viewModelScope.launch {
+//            _applicationsState.postValue(ViewState.Loading)
+//            val response = RemoteRepository.getApplicationsList(page)
+//            if (response.isSuccessful){
+//                _applicationsState.postValue(ViewState.Success<List<OrderModel>>(response.body()!!))
+//            } else {
+//                _applicationsState.postValue(ViewState.Error<ErrorModel>(parseError(response)))
+//            }
+//        }
+//    }
 }

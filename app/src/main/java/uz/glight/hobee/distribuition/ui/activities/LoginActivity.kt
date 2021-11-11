@@ -15,10 +15,12 @@ import com.glight.hobeedistribuition.network.model.UserLogin
 import com.glight.hobeedistribuition.network.model.UserModel
 import com.glight.hobeedistribuition.utils.ModelPreferencesManager
 import com.glight.hobeedistribuition.utils.PermissionUtils
+import com.google.android.material.snackbar.Snackbar
 import com.yariksoffice.lingver.Lingver
 import kotlinx.coroutines.*
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
+import uz.glight.hobee.distribuition.utils.NetworkHelper
 
 /**
  *
@@ -27,7 +29,9 @@ class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceC
     // TODO: Migrate to bindings feature
     private lateinit var fullName: EditText
     private lateinit var password: EditText
+
     // TODO: // create getTagName function in activity scope ibragimov.commons
+
     private val TAG = LoginActivity::class.java.canonicalName
     private lateinit var ma: Intent
     private lateinit var progress: ProgressBar
@@ -60,7 +64,11 @@ class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceC
         loginBtn.setOnClickListener {
             progress.visibility = View.VISIBLE
             loginBtn.isEnabled = false
-            login()
+            if (NetworkHelper(applicationContext).isNetworkConnected()) {
+                login()
+            } else {
+                Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -89,11 +97,11 @@ class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceC
                     )
                 )
                 if (response.isSuccessful) {
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         onSuccess(response.body()!!)
                     }
                 } else {
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         onError(RemoteRepository.parseError(response))
                     }
                 }
@@ -155,9 +163,10 @@ class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceC
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         Log.d(TAG, "onSharedPreferenceChanged: $key")
-        if (key == ModelPreferencesManager.PREFERENCES_FILE_NAME){
-            val prefData = ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
-            if (prefData?.accessToken != null){
+        if (key == ModelPreferencesManager.PREFERENCES_FILE_NAME) {
+            val prefData =
+                ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
+            if (prefData?.accessToken != null) {
                 startActivity(ma)
                 finish()
             }

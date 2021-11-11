@@ -32,6 +32,6 @@ data class CreateOrderModel(
         @SerializedName("amount")
         var amount: Int?,
         @SerializedName("total_price")
-        var allPrice: Double
+        var allPrice: Long
     ): Serializable
 }

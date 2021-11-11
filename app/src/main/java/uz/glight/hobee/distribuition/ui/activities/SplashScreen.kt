@@ -8,9 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.glight.hobeedistribuition.network.model.UserModel
 import com.glight.hobeedistribuition.utils.ModelPreferencesManager
+import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.BuildConfig
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.utils.AnimationHelper
+import uz.glight.hobee.distribuition.utils.NetworkHelper
 
 /**
  *
@@ -54,24 +56,30 @@ class SplashScreen : AppCompatActivity() {
         /**
          * get user that saved into device, if user not saved return null
          */
-        val user =
-            ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
+        if (NetworkHelper(applicationContext).isNetworkConnected()) {
 
-        object : CountDownTimer(1000, 1000) {
-            override fun onTick(p0: Long) {
+            val user =
+                ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
 
-            }
+            object : CountDownTimer(1000, 1000) {
+                override fun onTick(p0: Long) {
 
-            override fun onFinish() {
-                if (user?.accessToken == null) {
-                    startActivity(la)
-                    finish()
-                } else {
-                    startActivity(ma)
-                    finish()
                 }
-            }
-        }.start()
+
+                override fun onFinish() {
+
+                    if (user?.accessToken == null) {
+                        startActivity(la)
+                        finish()
+                    } else {
+                        startActivity(ma)
+                        finish()
+                    }
+                }
+            }.start()
+        } else {
+            Snackbar.make(tx, "No internet connection", Snackbar.LENGTH_SHORT).show()
+        }
 
     }
 }

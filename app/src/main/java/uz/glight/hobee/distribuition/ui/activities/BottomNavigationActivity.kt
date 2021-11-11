@@ -1,10 +1,12 @@
 package uz.glight.hobee.distribuition.ui.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,8 +16,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.glight.hobeedistribuition.network.model.UserModel
 import com.glight.hobeedistribuition.utils.ModelPreferencesManager
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
+import uz.glight.hobee.distribuition.utils.NetworkHelper
 
 class BottomNavigationActivity : AppCompatActivity() {
 
@@ -25,15 +30,21 @@ class BottomNavigationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom_navigation)
-        val userData = ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
-        RemoteRepository.setService(userData?.accessToken!!)
-
+        val userData =
+            ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        if (NetworkHelper(applicationContext).isNetworkConnected()) {
+            RemoteRepository.setService(userData?.accessToken!!)
+        } else {
+            Snackbar.make(toolbar, "No internet connection", Snackbar.LENGTH_SHORT).show()
+        }
+
         setSupportActionBar(toolbar)
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)

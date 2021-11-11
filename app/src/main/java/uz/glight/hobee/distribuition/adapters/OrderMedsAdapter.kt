@@ -2,6 +2,7 @@ package uz.glight.hobee.distribuition.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +10,7 @@ import uz.glight.hobee.distribuition.databinding.CardDrugBinding
 import uz.glight.hobee.distribuition.network.models.Item
 
 class OrderMedsAdapter(var itemClick: setOnClick) :
-    ListAdapter<Item, OrderMedsAdapter.Vh>(MyDiffUtil()) {
+    PagingDataAdapter<Item, OrderMedsAdapter.Vh>(MyDiffUtil()) {
     inner class Vh(var item: CardDrugBinding) : RecyclerView.ViewHolder(item.root) {
         fun onBind(data: Item, position: Int) {
             item.apply {
@@ -39,7 +40,6 @@ class OrderMedsAdapter(var itemClick: setOnClick) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Vh {
         return Vh(CardDrugBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
-
 
     interface setOnClick {
         fun itemClick(item: Item, position: Int)

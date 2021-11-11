@@ -5,7 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-//import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import uz.glight.hobee.distribuition.BuildConfig
 import java.util.concurrent.TimeUnit
@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitBuilder {
 
     private const val BASE_URL = BuildConfig.BASE_URL
+//    private const val BASE_URL = "http://192.168.0.179/v1/api/"    //local base url
 
     private fun getRetrofit(token: String?): Retrofit {
         val interceptor = HttpLoggingInterceptor()
@@ -25,7 +26,6 @@ object RetrofitBuilder {
             .addInterceptor(
                 Interceptor { chain ->
                     val original: Request = chain.request()
-
                     val request: Request = if (token != null) {
                         original.newBuilder()
                             .addHeader("From-Mobile", BuildConfig.APPLICATION_ID)
@@ -46,9 +46,7 @@ object RetrofitBuilder {
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
-//            .addCallAdapterFactory(
-//                RxJava2CallAdapterFactory.create()
-//            )
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
 
