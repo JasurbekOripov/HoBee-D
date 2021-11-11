@@ -59,22 +59,4 @@ class ClinicsFragment : Fragment(R.layout.fragment_clinics) {
         })
     }
 
-//    override fun onPause() {
-//        viewModel.datamodelClinic.removeObserver(dataRetriever)
-//        super.onPause()
-//    }
-
-//    private val dataRetriever = Observer<PagingData<ClinicModel>> {
-//        dataAdapter.update(it)
-//    }
-//
-//    val listener = object : OnItemClickListener<ClinicModel>{
-//        override fun onClickItem(position: Int, data: ClinicModel) {
-//            findNavController().navigate(R.id.to_hospital_fragment, bundleOf("clinic" to data, "title" to data.name))
-//        }
-//    }
-
-//    private val dataAdapter = object : ItemsListAdapter<ClinicModel>(listener) {
-//        override fun getLayoutId(position: Int, obj: ClinicModel): Int = R.layout.card_pharm
-//    }
 }

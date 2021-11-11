@@ -1,7 +1,6 @@
 package uz.glight.hobee.distribuition.ui.fragments.drugstore
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.fragment.app.Fragment
@@ -28,19 +27,15 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
-    //    private lateinit var adapter: ItemsListAdapter<DrugModel>
     lateinit var adapter: WareHouseAdapter
     lateinit var wareHouseViewModel: WareHouseViewModel
     var intervall = 0L
-
-    //    lateinit var drugsMainViewModel: DrugsMainViewModel
     private var param1: String? = null
     lateinit var networkHelper: NetworkHelper
     private var param2: String? = null
     private var bindingBasket: FragmentWarehouseBinding? = null
-
-    //    private val viewModel: DrugStoreViewModel by viewModels({ requireParentFragment() })
     private lateinit var db: AppDataBase
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
@@ -48,7 +43,6 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             param2 = it.getString(ARG_PARAM2)
         }
         wareHouseViewModel = ViewModelProviders.of(this)[WareHouseViewModel::class.java]
-//        drugsMainViewModel = ViewModelProvider(this)[DrugsMainViewModel::class.java]
         networkHelper = NetworkHelper(requireContext())
         val binding = FragmentWarehouseBinding.bind(view)
         bindingBasket = binding
@@ -113,54 +107,10 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
         super.onCreateOptionsMenu(menu, menuInflater)
     }
 
-    override fun onResume() {
-        super.onResume()
-//        viewModel.datamodelWarehouse.observe(requireParentFragment().viewLifecycleOwner, dataRetriever)
-//        lifecycleScope.launch() {
-//            viewModel.datamodelWarehouse.collect {
-//                when (it) {
-//                    is ViewState.Success<*> -> {
-//                        dataAdapter.update(it.data as List<DrugModel>)
-//                    }
-//                    is ViewState.Error<*> -> {
-//                    }
-//                    is ViewState.Loading -> {
-//                    }
-//                }
-//            }
-//        }
-    }
-
-    private fun loadData() {
-
-
-    }
-
-
-//    override fun onPause() {
-////        viewModel.datamodelWarehouse.removeObserver(dataRetriever)
-//        super.onPause()
-//    }
-
-//    private val dataRetriever = Observer<ViewState> {
-//        when (it) {
-//            is ViewState.Success<*> -> {
-////                Log.d(getFragmentTag(), it.data.toString())
-//                dataAdapter.update(it.data as List<DrugModel>)
-//            }
-//            is ViewState.Error<*> -> {
-////                Log.d(getFragmentTag(), it.error.toString())
-//            }
-//            is ViewState.Loading -> {
-////                Log.d(getFragmentTag(), "LOADING")
-//            }
-//        }
-//    }
 
     val callback = object : PositiveNegativeCallback {
         override fun positive(bkItem: CreateOrderModel.DrugsListItem) {
             var where_house_id = requireParentFragment().arguments?.getInt("drugstore_id") ?: 0
-//            viewModel.addDrugToBasket(bkItem)
             db.dao().add(
                 SavedMedEntity(
                     med_id = bkItem.id ?: 1,
@@ -181,12 +131,6 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
 
     }
 
-    //    val listener = object : OnItemClickListener<DrugModel> {
-//        override fun onClickItem(position: Int, data: DrugModel) {
-//            val dialog = AmountDialog.newInstance(data, callback)
-//            dialog.show(childFragmentManager, getFragmentTag())
-//        }
-//    }
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -197,7 +141,4 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 }
             }
     }
-//    private val dataAdapter = object : ItemsListAdapter<DrugModel>(listener) {
-//        override fun getLayoutId(position: Int, obj: DrugModel): Int = R.layout.card_drug
-//    }
 }

@@ -67,13 +67,6 @@ object RemoteRepository {
         return service.getPharmacy(query,page)
     }
 
-//    suspend fun getClinic(): Response<List<ClinicModel>> {
-//        return service.getClinics(null)
-//    }
-
-//    suspend fun getPharmacy(): Response<List<ClinicModel>> {
-//        return service.getPharmacy(null)
-//    }
 
     suspend fun getDiscounts(/*page:Int*/): Response<List<DiscountModel>> {
         return service.getDiscount()
@@ -83,9 +76,6 @@ object RemoteRepository {
         return service.getWarehouse(page = page,query = str)
     }
 
-//    suspend fun getWarehouse(query: String): Response<List<DrugModel>> {
-//        return service.getWarehouse(query = query)
-//    }
 
     suspend fun getDoctors(clinic_id: String, page:Int,name: String = ""): Response<List<DoctorModel>> {
         return service.getDoctors(clinic_id, page,name)

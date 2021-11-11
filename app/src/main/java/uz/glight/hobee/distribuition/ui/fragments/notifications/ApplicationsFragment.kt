@@ -26,9 +26,8 @@ import uz.glight.hobee.ibrogimov.commons.getFragmentTag
 class ApplicationsFragment : Fragment(R.layout.fragment_applications) {
     lateinit var viewModel: MyApplicationsViewModel
     private var applicationsFragmentBinding: FragmentApplicationsBinding? = null
-
-    //    private val viewModel: ApplicationsViewModel by viewModels()
     lateinit var myAdapter: MyApplicationsAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentApplicationsBinding.bind(view)
@@ -39,33 +38,8 @@ class ApplicationsFragment : Fragment(R.layout.fragment_applications) {
             }
         })
         binding.listView.adapter = myAdapter
-//        viewModel.getApplications(1)
     }
 
-//    private val dataRetriever = Observer<ViewState> {
-//        when (it) {
-//            is ViewState.Success<*> -> {
-//                Log.d(getFragmentTag(), it.data.toString())
-//                dataAdapter.update(it.data as List<OrderModel>)
-//            }
-//            is ViewState.Error<*> -> {
-//                Log.d(getFragmentTag(), it.error.toString())
-//            }
-//            is ViewState.Loading -> {
-//                Log.d(getFragmentTag(), "LOADING")
-//            }
-//        }
-//    }
-
-//    private val listener = object : OnItemClickListener<OrderModel> {
-//        override fun onClickItem(position: Int, data: OrderModel) {
-//            findNavController().navigate(R.id.infoOrderFragment, bundleOf("data" to data))
-//        }
-//    }
-//
-//    private val dataAdapter = object : ItemsListAdapter<OrderModel>(listener) {
-//        override fun getLayoutId(position: Int, obj: OrderModel): Int = R.layout.card_order
-//    }
 
     override fun onResume() {
         super.onResume()
@@ -74,7 +48,6 @@ class ApplicationsFragment : Fragment(R.layout.fragment_applications) {
         } else {
             view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
         }
-//        viewModel.applicationsState.observe(viewLifecycleOwner, dataRetriever)
     }
 
     private fun loadData() {
@@ -85,12 +58,6 @@ class ApplicationsFragment : Fragment(R.layout.fragment_applications) {
             }
         })
     }
-
-    override fun onPause() {
-//        viewModel.applicationsState.removeObserver(dataRetriever)
-        super.onPause()
-    }
-
 
     override fun onDestroyView() {
         applicationsFragmentBinding = null

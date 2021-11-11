@@ -39,27 +39,4 @@ class HomeViewModel() : ViewModel() {
         }
     }
 
-//    fun getPharmacy() {
-//        viewModelScope.launch {
-//            _viewmodel.postValue(ViewState.Loading)
-//            val res = RemoteRepository.getPharmacy()
-//            if (res.isSuccessful) {
-//                _viewmodel.postValue(ViewState.Success<List<ClinicModel>>(data = res.body()!!))
-//            } else {
-//                _viewmodel.postValue(ViewState.Error<ErrorModel>(error = parseError(res)))
-//            }
-//        }
-//    }
-//    fun getClinic(){
-//        viewModelScope.launch {
-//            _viewmodelClinic.postValue(ViewState.Loading)
-//            val res = RemoteRepository.getClinic()
-//            if (res.isSuccessful){
-//                _viewmodelClinic.postValue(ViewState.Success<List<ClinicModel>>(data = res.body()!!))
-//            } else {
-//                _viewmodelClinic.postValue(ViewState.Error<ErrorModel>(error = parseError(res)))
-//            }
-//        }
-//    }
-
 }

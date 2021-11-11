@@ -27,7 +27,6 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
     private var param2: String? = null
     private lateinit var adapter: BasketListAdapter
     private var bindingBasket: FragmentBasketBinding? = null
-//    private val viewModel: DrugStoreViewModel by viewModels({ requireParentFragment() })
     private lateinit var dialog: CreateApplicationDialog
     private lateinit var binding: FragmentBasketBinding
     lateinit var db: AppDataBase
@@ -43,10 +42,6 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         db = AppDataBase.getInstanse(requireContext())
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        loadData()
-//    }
 
     private fun loadData() {
         val parentArgs = requireParentFragment().arguments
@@ -124,19 +119,8 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         } else {
             view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
         }
-//        viewModel.datamodelBasket.observe(requireParentFragment().viewLifecycleOwner, dataRetriever)
     }
 
-//    override fun onPause() {
-//        viewModel.datamodelBasket.removeObserver(dataRetriever)
-//        super.onPause()
-//    }
-
-//    private val dataRetriever = Observer<List<CreateOrderModel.DrugsListItem>> {
-//
-////            it as List<CreateOrderModel.DrugsListItem>
-//
-//    }
 
     companion object {
         @JvmStatic

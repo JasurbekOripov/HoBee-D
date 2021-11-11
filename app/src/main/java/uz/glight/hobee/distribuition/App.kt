@@ -10,7 +10,6 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         ModelPreferencesManager.with(this)
-
         val store = PreferenceLocaleStore(this, Locale("ru"))
         Lingver.init(this, store)
     }

@@ -32,7 +32,6 @@ class PharmacyFragment : Fragment(R.layout.fragment_pharmacy) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentPharmacyBinding.bind(view)
-//        viewModel= HomeViewModel(this,viewLifecycleOwner)
         networkHelper = NetworkHelper(requireContext())
         bindingPharmacy = binding
         adaptep = PharmacyAdapter(object : PharmacyAdapter.setOnClick {
@@ -56,7 +55,6 @@ class PharmacyFragment : Fragment(R.layout.fragment_pharmacy) {
         } else {
             view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
         }
-//        viewModel.datamodel.observe(requireParentFragment().viewLifecycleOwner, dataRetriever)
     }
 
     private fun loadData() {
@@ -76,35 +74,4 @@ class PharmacyFragment : Fragment(R.layout.fragment_pharmacy) {
         })
     }
 
-//    override fun onPause() {
-//        viewModel.datamodel.removeObserver(dataRetriever)
-//        super.onPause()
-//    }
-
-//    private val dataRetriever = Observer<ViewState>{
-//        when (it) {
-//            is ViewState.Success<*> -> {
-//                Log.d(TAG, it.data.toString())
-//                dataAdapter.update(it.data as List<ClinicModel>)
-//            }
-//            is ViewState.Error<*> -> {
-//                Log.d(TAG, it.error.toString())
-//            }
-//            is ViewState.Loading -> {
-//                Log.d(TAG, "LOADING")
-//            }
-//        }
-//    }
-//
-//    val listener = object : OnItemClickListener<ClinicModel> {
-//        override fun onClickItem(position: Int, data: ClinicModel) {
-//            val bundle = bundleOf("drugstore_id" to data.id, "title" to data.name)
-//            findNavController().navigate(R.id.to_drugstore, bundle)
-//        }
-//    }
-//
-//    private val dataAdapter = object : ItemsListAdapter<ClinicModel>(listener) {
-//        override fun getLayoutId(position: Int, obj: ClinicModel): Int = R.layout.card_pharm
-//
-//    }
 }

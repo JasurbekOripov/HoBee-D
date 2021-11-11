@@ -15,7 +15,6 @@ import uz.glight.hobee.distribuition.viewmodels.WareHouseViewModel
 
 class DrugStoreFragment : Fragment(R.layout.fragment_drug_store) {
 
-//        private val viewModel: DrugStoreViewModel by viewModels()
     private lateinit var wareHouseViewModel: WareHouseViewModel
     lateinit var networkHelper: NetworkHelper
     private var drugStoreBinding: FragmentDrugStoreBinding? = null
