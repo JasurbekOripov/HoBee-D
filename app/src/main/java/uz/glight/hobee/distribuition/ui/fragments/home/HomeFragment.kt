@@ -106,7 +106,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         BottomNavigationActivity().finish()
                     }
                 }
-                if (newText != null) {
+                if (newText != null && newText != "") {
                     if (networkHelper.isNetworkConnected()) {
                         if (bindingHome?.tab?.selectedTabPosition == 0) {
                             homeViewModel.getPharmacy(newText, viewLifecycleOwner)
@@ -123,6 +123,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         }
                     }
 
+                }else if (newText==""){
+                    if (networkHelper.isNetworkConnected()) {
+                        if (bindingHome?.tab?.selectedTabPosition == 0) {
+                            homeViewModel.getPharmacy(newText, viewLifecycleOwner)
+                        } else if (bindingHome?.tab?.selectedTabPosition == 1) {
+                            homeViewModel.getClinic(newText, viewLifecycleOwner)
+                        }
+                    } else {
+                        view?.let {
+                            Snackbar.make(
+                                it,
+                                "No internet connection",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
                 return true
             }

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -30,6 +32,7 @@ import java.lang.Exception
 
 class BottomNavigationActivity : AppCompatActivity() {
     val br: BroadcastReceiver = NetworkChangeListener()
+
     // App Bar configuration
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -75,12 +78,15 @@ class BottomNavigationActivity : AppCompatActivity() {
                                 "You access is failed , please re-enter again",
                                 Snackbar.LENGTH_LONG
                             ).show()
-                            val la = Intent(applicationContext, LoginActivity::class.java)
-                            la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(la)
-                            finish()
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                val la = Intent(applicationContext, LoginActivity::class.java)
+                                la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(la)
+                                finish()
+                            }, 1500)
+
                         }
-                    }catch (e:Exception){
+                    } catch (e: Exception) {
                         Snackbar.make(navView, "No internet connection", Snackbar.LENGTH_SHORT)
                             .show()
                     }

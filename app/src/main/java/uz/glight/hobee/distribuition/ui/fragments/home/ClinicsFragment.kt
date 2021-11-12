@@ -52,10 +52,12 @@ class ClinicsFragment : Fragment(R.layout.fragment_clinics) {
         viewModel.datamodelClinic.observe(viewLifecycleOwner, {
             lifecycleScope.launch {
                 it.let {data->
-                    if (data!=null)
-                    adapter.submitData(data)
+                    if (data!=null) {
+                        adapter.submitData(data)
+                    }
                 }
             }
+            bindingPharmacy?.listView?.scrollToPosition(0)
         })
     }
 

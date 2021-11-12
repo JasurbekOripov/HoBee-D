@@ -43,7 +43,7 @@ class DashboardFragment : Fragment() {
         val root = binding.root
         mapView = binding.mapView
         mapView.map.move(
-            CameraPosition(defaultPoint, 14f, 0f, 0f),
+            CameraPosition(defaultPoint, 11f, 0f, 0f),
             Animation(Animation.Type.SMOOTH, 0F), null
         )
         loadData()

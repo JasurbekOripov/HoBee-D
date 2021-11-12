@@ -113,9 +113,13 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                         intervall = cTime
                         wareHouseViewModel.getData(query).observe(viewLifecycleOwner, {
                             lifecycleScope.launch {
-                                adapter.submitData(it)
+                                if (it != null) {
+                                    adapter.submitData(it)
+                                }
+
                             }
                         })
+                        bindingBasket?.listView?.scrollToPosition(0)
                     }
 
                 }

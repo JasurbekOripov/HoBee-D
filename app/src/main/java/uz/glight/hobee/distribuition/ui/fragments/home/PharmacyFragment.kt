@@ -53,7 +53,11 @@ class PharmacyFragment : Fragment(R.layout.fragment_pharmacy) {
         if (networkHelper.isNetworkConnected()) {
             loadData()
         } else {
-            Snackbar.make(bindingPharmacy?.listView!!, "No internet connection", Snackbar.LENGTH_SHORT)
+            Snackbar.make(
+                bindingPharmacy?.listView!!,
+                "No internet connection",
+                Snackbar.LENGTH_SHORT
+            )
                 .show()
         }
     }
@@ -68,8 +72,10 @@ class PharmacyFragment : Fragment(R.layout.fragment_pharmacy) {
         viewModel.datamodel.observe(this, {
             lifecycleScope.launch {
                 it.let { data ->
-                    if (data != null)
+                    if (data != null) {
                         adaptep.submitData(data)
+                        bindingPharmacy?.listView?.scrollToPosition(0)
+                    }
                 }
             }
         })
