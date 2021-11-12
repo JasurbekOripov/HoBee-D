@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.glight.hobeedistribuition.network.model.CreateOrderModel
 import com.glight.hobeedistribuition.network.model.DrugModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.databinding.DialogAmountBinding
 import uz.glight.hobee.distribuition.utils.NetworkHelper
 import java.lang.Exception
@@ -16,7 +17,7 @@ import java.lang.Exception
 class AmountDialog(private val callback: PositiveNegativeCallback) : BottomSheetDialogFragment() {
     private var amountBinding: DialogAmountBinding? = null
     private lateinit var drug: DrugModel
-    lateinit var networkHelper:NetworkHelper
+    lateinit var networkHelper: NetworkHelper
 
     companion object {
         fun newInstance(drug: DrugModel, callback: PositiveNegativeCallback) =
@@ -45,24 +46,27 @@ class AmountDialog(private val callback: PositiveNegativeCallback) : BottomSheet
             val editTextVal = amoutOfDrug.text
             try {
                 positiveBtn.setOnClickListener {
-                    if (networkHelper.isNetworkConnected()){
-                    if (editTextVal.isNotBlank() && editTextVal.isNotEmpty()) {
-                        val totalPrice =
-                            (drug.sellPrice.toDouble() * editTextVal.toString().toInt()).toLong()
-                        val bkItem: CreateOrderModel.DrugsListItem = CreateOrderModel.DrugsListItem(
-                            drug.catalogueMedicine.name,
-                            drug.id,
-                            drug.catalogueMedicine.id,
-                            drug.sellPrice,
-                            amount = editTextVal.toString().toInt(),
-                            totalPrice
-                        )
-                        callback.positive(bkItem)
-                        dismiss()
-                    } else {
-                        amoutOfDrug.error = ""
+                    if (networkHelper.isNetworkConnected()) {
+                        if (editTextVal.isNotBlank() && editTextVal.isNotEmpty()) {
+                            val totalPrice =
+                                (drug.sellPrice.toDouble() * editTextVal.toString()
+                                    .toInt()).toLong()
+                            val bkItem: CreateOrderModel.DrugsListItem =
+                                CreateOrderModel.DrugsListItem(
+                                    drug.catalogueMedicine.name,
+                                    drug.id,
+                                    drug.catalogueMedicine.id,
+                                    drug.sellPrice,
+                                    amount = editTextVal.toString().toInt(),
+                                    totalPrice
+                                )
+                            callback.positive(bkItem)
+                            dismiss()
+                        } else {
+                            Toast.makeText(requireContext(), "Amount can not be empty", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }}
+                }
 
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "error count", Toast.LENGTH_SHORT).show()
