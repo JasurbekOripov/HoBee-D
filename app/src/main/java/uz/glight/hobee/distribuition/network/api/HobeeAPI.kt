@@ -4,16 +4,13 @@ import com.glight.hobeedistribuition.network.model.*
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
-import uz.glight.hobee.distribuition.network.models.ClinicModel
-import uz.glight.hobee.distribuition.network.models.DiscountModel
-import uz.glight.hobee.distribuition.network.models.RequestData
 import retrofit2.http.Url
 
 import okhttp3.ResponseBody
 import retrofit2.Call
 
 import retrofit2.http.GET
-import uz.glight.hobee.distribuition.network.models.Item
+import uz.glight.hobee.distribuition.network.models.*
 
 
 interface HobeeAPI {
@@ -36,6 +33,11 @@ interface HobeeAPI {
     suspend fun sendRecord(
         @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>
     ): Response<UploadedFileResponse>
+
+    @POST("agents-live-location")
+    fun sendLocation(
+        @Body user: UserLocation,
+    ): Call<LocationResponse>
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -91,6 +93,7 @@ interface HobeeAPI {
         @Query("per-page") limit: Int? = 30,
         @Query("page") page: Int?
     ): Response<List<ClinicModel>>                                                  //ready
+
 
 }
 

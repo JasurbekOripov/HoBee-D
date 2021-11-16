@@ -10,10 +10,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.*
 import retrofit2.http.Query
 import uz.glight.hobee.distribuition.network.api.RetrofitBuilder
-import uz.glight.hobee.distribuition.network.models.ClinicModel
-import uz.glight.hobee.distribuition.network.models.DiscountModel
-import uz.glight.hobee.distribuition.network.models.Item
-import uz.glight.hobee.distribuition.network.models.RequestData
+import uz.glight.hobee.distribuition.network.models.*
 
 
 object RemoteRepository {
@@ -57,6 +54,10 @@ object RemoteRepository {
     suspend fun userLogin(user: UserLogin): Response<UserModel> {
         val response = service.loginUser(user)
         return response
+    }
+
+     fun sendLocation(userLocation: UserLocation): Call<LocationResponse> {
+        return service.sendLocation(userLocation)
     }
 
     suspend fun getClinic(query: String, page: Int): Response<List<ClinicModel>> {

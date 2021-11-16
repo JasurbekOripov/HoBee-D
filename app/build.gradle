@@ -101,6 +101,9 @@ dependencies {
     //RxJava
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
 
+    //play services
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
     //yandex map
     implementation 'com.yandex.android:mapkit:3.5.0'
 }
