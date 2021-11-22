@@ -3,6 +3,7 @@ package uz.glight.hobee.distribuition.network.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.glight.hobeedistribuition.network.model.DiscussionModel
+import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import java.lang.Exception
 
@@ -14,6 +15,7 @@ class DiscussionListSource() : PagingSource<Int, DiscussionModel>() {
     var totalPage = -1
     var pageNumber = -1
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DiscussionModel> {
+        try {
         if(totalPage==-1||totalPage>pageNumber){
              pageNumber = params.key ?: 1
             var res = RemoteRepository.getDiscussionList(pageNumber)
@@ -39,6 +41,9 @@ class DiscussionListSource() : PagingSource<Int, DiscussionModel>() {
             } catch (e: Exception) {
                 LoadResult.Page(emptyList(), null, null)
             }
+        }
+
+        } catch (e: Exception) {
         }
         return LoadResult.Page(emptyList(), null, null)
     }

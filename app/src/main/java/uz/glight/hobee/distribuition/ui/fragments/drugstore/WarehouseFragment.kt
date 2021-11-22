@@ -26,6 +26,7 @@ import uz.glight.hobee.distribuition.ui.fragments.drugstore.dialogs.PositiveNega
 import uz.glight.hobee.distribuition.utils.NetworkHelper
 import uz.glight.hobee.distribuition.viewmodels.WareHouseViewModel
 import uz.glight.hobee.ibrogimov.commons.getFragmentTag
+import java.lang.Exception
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -93,36 +94,43 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
-                lifecycleScope.launch {
-                    var res = RemoteRepository.getDiscounts()
-                    if (res.code() > 400) {
-                        Snackbar.make(
-                            view!!,
-                            "You access is failed , please re-enter again",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                        val la = Intent(requireContext(), LoginActivity::class.java)
-                        la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(la)
-                        BottomNavigationActivity().finish()
+                try {
+                if (networkHelper.isNetworkConnected()) {
+                    lifecycleScope.launch {
+                        var res = RemoteRepository.getDiscounts()
+                        if (res.code() > 400) {
+                            Snackbar.make(
+                                view!!,
+                                "You access is failed , please re-enter again",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            val la = Intent(requireContext(), LoginActivity::class.java)
+                            la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(la)
+                            BottomNavigationActivity().finish()
+                        }
                     }
-                }
-                if (query != null) {
-                    var cTime = System.currentTimeMillis()
-                    if (cTime - intervall > 400) {
-                        intervall = cTime
-                        wareHouseViewModel.getData(query).observe(viewLifecycleOwner, {
-                            lifecycleScope.launch {
-                                if (it != null) {
-                                    adapter.submitData(it)
+                    if (query != null) {
+                        var cTime = System.currentTimeMillis()
+                        if (cTime - intervall > 400) {
+                            intervall = cTime
+                            wareHouseViewModel.getData(query).observe(viewLifecycleOwner, {
+                                lifecycleScope.launch {
+                                    if (it != null) {
+                                        adapter.submitData(it)
+                                    }
+
                                 }
+                            })
+                            bindingBasket?.listView?.scrollToPosition(0)
+                        }
 
-                            }
-                        })
-                        bindingBasket?.listView?.scrollToPosition(0)
                     }
-
                 }
+
+                    } catch (e: Exception) {
+                        Snackbar.make(searchView, "Error", Snackbar.LENGTH_SHORT).show()
+                    }
                 return true
             }
         })

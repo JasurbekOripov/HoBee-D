@@ -2,6 +2,7 @@ package uz.glight.hobee.distribuition.network.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.network.models.Item
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import java.lang.Exception
@@ -14,6 +15,8 @@ class OrderItemsSource(var id: Int) : PagingSource<Int, Item>() {
     var totalPage = -1
     var pageNumber = -1
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item> {
+        try {
+
         if(totalPage==-1||totalPage>pageNumber){
             pageNumber = params.key ?: 1
             var res = RemoteRepository.getRespons("http://83.69.136.134/v1/api/request-agent-items?request_agent_id=${id}&per-page25&page=${pageNumber}")
@@ -40,6 +43,9 @@ class OrderItemsSource(var id: Int) : PagingSource<Int, Item>() {
                 LoadResult.Page(emptyList(), null, null)
             }
         }
+
+            } catch (e: Exception) {
+            }
         return LoadResult.Page(emptyList(), null, null)
     }
 }

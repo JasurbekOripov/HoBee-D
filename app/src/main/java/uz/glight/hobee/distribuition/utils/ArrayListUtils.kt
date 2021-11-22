@@ -1,4 +1,4 @@
-package com.glight.hobeedistribuition.utils
+package uz.glight.hobee.distribuition.utils
 
 object ArrayListUtils {
     fun <T> merge(first: List<T>, second: List<T>): List<T> {

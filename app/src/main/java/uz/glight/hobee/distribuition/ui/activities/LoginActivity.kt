@@ -21,6 +21,7 @@ import kotlinx.coroutines.*
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import java.lang.Exception
 
 /**
  *
@@ -64,10 +65,14 @@ class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceC
         loginBtn.setOnClickListener {
             progress.visibility = View.VISIBLE
             loginBtn.isEnabled = false
-            if (NetworkHelper(applicationContext).isNetworkConnected()) {
-                login()
-            } else {
-                Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show()
+            try {
+                if (NetworkHelper(applicationContext).isNetworkConnected()) {
+                    login()
+                } else {
+                    Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Snackbar.make(fullName, "Error", Snackbar.LENGTH_SHORT).show()
             }
         }
     }

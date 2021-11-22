@@ -26,6 +26,7 @@ import uz.glight.hobee.distribuition.databinding.FragmentDashboardBinding
 import uz.glight.hobee.distribuition.network.models.ClinicModel
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.ui.activities.BottomNavigationActivity
+import uz.glight.hobee.distribuition.utils.NetworkHelper
 import java.lang.Exception
 
 class DashboardFragment : Fragment() {
@@ -46,8 +47,16 @@ class DashboardFragment : Fragment() {
             CameraPosition(defaultPoint, 11f, 0f, 0f),
             Animation(Animation.Type.SMOOTH, 0F), null
         )
-        loadData()
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (NetworkHelper(requireContext()).isNetworkConnected()) {
+            loadData()
+        } else {
+            Snackbar.make(requireView(), "No internet connection", Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadData() {

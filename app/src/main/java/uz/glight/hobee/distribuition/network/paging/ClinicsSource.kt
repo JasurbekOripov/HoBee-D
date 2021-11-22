@@ -2,6 +2,7 @@ package uz.glight.hobee.distribuition.network.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.network.models.ClinicModel
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import java.lang.Exception
@@ -14,11 +15,13 @@ class ClinicsSource( var name: String) : PagingSource<Int, ClinicModel>() {
     var totalPage = -1
     var pageNumber = -1
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ClinicModel> {
+        try {
 
         if(totalPage==-1||totalPage>pageNumber){
             var pageNumber = params.key ?: 1
             var res = RemoteRepository.getClinic(name,pageNumber)
-        var headers = res.headers()
+            var headers = res.headers()
+
             if (totalPage==-1){
                 for (i in headers) {
                     if (i.first.contains("X-Pagination-Page-Count")) {
@@ -41,6 +44,9 @@ class ClinicsSource( var name: String) : PagingSource<Int, ClinicModel>() {
                 LoadResult.Page(emptyList(), null, null)
             }
         }
+            } catch (e: Exception) {
+
+            }
         return LoadResult.Page(emptyList(), null, null)
     }
 }

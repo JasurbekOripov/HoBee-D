@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.glight.hobeedistribuition.network.model.CreateOrderModel
-import com.glight.hobeedistribuition.utils.ArrayListUtils
+import uz.glight.hobee.distribuition.utils.ArrayListUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.ulugbek.ibragimovhelpers.helpers.commons.toast
@@ -23,6 +23,7 @@ import uz.glight.hobee.distribuition.room.AppDataBase
 import uz.glight.hobee.distribuition.utils.NetworkHelper
 import uz.glight.hobee.ibrogimov.commons.getFragmentTag
 import uz.glight.hobee.ibrogimov.commons.parseError
+import java.lang.Exception
 
 
 class CreateApplicationFragment : Fragment(R.layout.fragment_create_application) {
@@ -46,18 +47,23 @@ class CreateApplicationFragment : Fragment(R.layout.fragment_create_application)
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentCreateApplicationBinding.bind(view)
         createAppBinding = binding
-        if (NetworkHelper(requireContext()).isNetworkConnected()) {
-            corJob.launch {
-                val response = RemoteRepository.getDiscounts()
-                if (response.isSuccessful) {
-                    withContext(Dispatchers.Main) {
-                        discountsList.value =
-                            ArrayListUtils.merge(discountsList.value!!, response.body()!!)
+        try {
+
+            if (NetworkHelper(requireContext()).isNetworkConnected()) {
+                corJob.launch {
+                    val response = RemoteRepository.getDiscounts()
+                    if (response.isSuccessful) {
+                        withContext(Dispatchers.Main) {
+                            discountsList.value =
+                                ArrayListUtils.merge(discountsList.value!!, response.body()!!)
+                        }
                     }
                 }
+            } else {
+                Snackbar.make(view, "No internet connection", Snackbar.LENGTH_SHORT).show()
             }
-        } else {
-            Snackbar.make(view, "No internet connection", Snackbar.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Snackbar.make(binding.root, "Error", Snackbar.LENGTH_SHORT).show()
         }
         createAppBinding?.apply {
             cartAllPrice.text = data.generalPrice
@@ -77,6 +83,8 @@ class CreateApplicationFragment : Fragment(R.layout.fragment_create_application)
                 findNavController().navigateUp()
             }
             discounts.check(0)
+            try {
+
             createOrder.setOnClickListener {
                 if (NetworkHelper(requireContext()).isNetworkConnected()) {
                     Log.d(getFragmentTag(), "onViewCreated: $data")
@@ -100,6 +108,10 @@ class CreateApplicationFragment : Fragment(R.layout.fragment_create_application)
 
 
             }
+
+        } catch (e: Exception) {
+            Snackbar.make(discounts, "Error", Snackbar.LENGTH_SHORT).show()
+        }
             discounts.setOnCheckedChangeListener { group, checkedId ->
                 val text = group.findViewById<Chip>(checkedId).text.toString()
                 val disPrepInfo = text.split("/")

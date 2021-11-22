@@ -54,11 +54,15 @@ class BottomNavigationActivity : AppCompatActivity() {
         val userData =
             ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        try {
 
-        if (NetworkHelper(applicationContext).isNetworkConnected()) {
-            RemoteRepository.setService(userData?.accessToken!!)
-        } else {
-            Snackbar.make(toolbar, "No internet connection", Snackbar.LENGTH_SHORT).show()
+            if (NetworkHelper(applicationContext).isNetworkConnected()) {
+                RemoteRepository.setService(userData?.accessToken!!)
+            } else {
+                Snackbar.make(toolbar, "No internet connection", Snackbar.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Snackbar.make(toolbar, "Error", Snackbar.LENGTH_SHORT).show()
         }
 
         setSupportActionBar(toolbar)
@@ -156,6 +160,7 @@ class BottomNavigationActivity : AppCompatActivity() {
         }
         registerReceiver(br, filter)
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

@@ -3,6 +3,7 @@ package uz.glight.hobee.distribuition.network.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.glight.hobeedistribuition.network.model.OrderModel
+import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import java.lang.Exception
 
@@ -14,6 +15,7 @@ class ApplicationsSource() : PagingSource<Int, OrderModel>() {
     var totalPage = -1
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, OrderModel> {
         var pageNumber = params.key ?: 1
+        try {
         if(totalPage==-1||totalPage>=pageNumber){
             var res = RemoteRepository.getApplicationsList(pageNumber)
             var headers = res.headers()
@@ -40,6 +42,9 @@ class ApplicationsSource() : PagingSource<Int, OrderModel>() {
                 LoadResult.Page(emptyList(), null, null)
             }
         }
+            } catch (e: Exception) {
+
+            }
         return LoadResult.Page(emptyList(), null, pageNumber + 1)
     }
 }

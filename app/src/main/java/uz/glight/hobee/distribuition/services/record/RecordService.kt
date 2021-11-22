@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.android.material.snackbar.Snackbar
 import com.ulugbek.ibragimovhelpers.helpers.commons.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -319,19 +320,22 @@ class RecordService : Service() {
         if (!file.exists()) {
             return;
         }
-        val map: MutableMap<String, RequestBody> = HashMap<String, RequestBody>();
+        try {
+            val map: MutableMap<String, RequestBody> = HashMap<String, RequestBody>();
 
-        val fileBody: RequestBody = file.asRequestBody("audio/*".toMediaTypeOrNull());
-        map.put("file\"; filename=\"${currFilePath.getFilenameFromPath()}\"", fileBody);
-        map.put("discussion_date", RemoteRepository.toRequestBody(getCurrentFormattedDateTime()));
-        map.put("doctor_id", RemoteRepository.toRequestBody(id.toString()));
+            val fileBody: RequestBody = file.asRequestBody("audio/*".toMediaTypeOrNull());
+            map.put("file\"; filename=\"${currFilePath.getFilenameFromPath()}\"", fileBody);
+            map.put("discussion_date", RemoteRepository.toRequestBody(getCurrentFormattedDateTime()));
+            map.put("doctor_id", RemoteRepository.toRequestBody(id.toString()));
 
 
-        job?.launch {
-            val res = RemoteRepository.sendRecord(map)
-            if (res.isSuccessful){
-                file.delete()
+            job?.launch {
+                val res = RemoteRepository.sendRecord(map)
+                if (res.isSuccessful){
+                    file.delete()
+                }
             }
+        } catch (e: Exception) {
         }
     }
 }

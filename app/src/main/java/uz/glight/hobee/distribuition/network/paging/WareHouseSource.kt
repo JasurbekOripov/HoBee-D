@@ -3,6 +3,7 @@ package uz.glight.hobee.distribuition.network.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.glight.hobeedistribuition.network.model.DrugModel
+import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import java.lang.Exception
 
@@ -14,6 +15,8 @@ class WareHouseSource(var str: String) : PagingSource<Int, DrugModel>() {
     var totalPage = -1
     var pageNumber = -1
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DrugModel> {
+        try {
+
         if (totalPage == -1 || totalPage > pageNumber) {
             pageNumber = params.key ?: 1
             var res = RemoteRepository.getWarehouse(page = pageNumber, str = str)
@@ -39,6 +42,9 @@ class WareHouseSource(var str: String) : PagingSource<Int, DrugModel>() {
             } catch (e: Exception) {
                 LoadResult.Page(emptyList(), null, null)
             }
+        }
+
+        } catch (e: Exception) {
         }
         return LoadResult.Page(emptyList(), null, null)
     }

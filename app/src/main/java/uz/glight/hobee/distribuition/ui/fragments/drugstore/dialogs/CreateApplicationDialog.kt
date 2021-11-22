@@ -14,6 +14,7 @@ import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.databinding.FragmentCreateApplicationBinding
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import java.lang.Exception
 
 
 class CreateApplicationDialog(private val data: CreateOrderModel, private val create: () -> Unit) :
@@ -57,13 +58,20 @@ class CreateApplicationDialog(private val data: CreateOrderModel, private val cr
                     dismiss()
                 }
                 createOrder.setOnClickListener {
-                    corJob.launch {
-                        val response = RemoteRepository.createApplication(data)
-                        if (response.isSuccessful) {
-                            withContext(Dispatchers.Main) {
-                                create.invoke()
+                    try {
+                    if (NetworkHelper(requireContext()).isNetworkConnected()){
+                        corJob.launch {
+                            val response = RemoteRepository.createApplication(data)
+                            if (response.isSuccessful) {
+                                withContext(Dispatchers.Main) {
+                                    create.invoke()
+                                }
                             }
                         }
+                    }
+
+                    } catch (e: Exception) {
+
                     }
                 }
             }

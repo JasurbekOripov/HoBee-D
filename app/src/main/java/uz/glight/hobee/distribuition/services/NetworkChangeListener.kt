@@ -14,7 +14,7 @@ class NetworkChangeListener : BroadcastReceiver() {
             val dialog = AlertDialog.Builder(context)
             dialog.setTitle("Error")
             dialog.setCancelable(false)
-            dialog.setMessage("Please check internet connection or turn on wifi")
+            dialog.setMessage("Please check internet connection or turn on WI-FI")
             dialog.setPositiveButton(
                 "OK"
             ) { dialog, _ ->

@@ -24,6 +24,7 @@ import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.ui.activities.BottomNavigationActivity
 import uz.glight.hobee.distribuition.ui.activities.LoginActivity
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import java.lang.Exception
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     lateinit var homeViewModel: HomeViewModel
@@ -92,7 +93,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                lifecycleScope.launch {
+                try {
+                if (networkHelper.isNetworkConnected()) {
+                    lifecycleScope.launch {
                     var res = RemoteRepository.getDiscounts()
                     if (res.code() > 400) {
                         Snackbar.make(
@@ -124,7 +127,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     }
 
                 }else if (newText==""){
-                    if (networkHelper.isNetworkConnected()) {
                         if (bindingHome?.tab?.selectedTabPosition == 0) {
                             homeViewModel.getPharmacy(newText, viewLifecycleOwner)
                         } else if (bindingHome?.tab?.selectedTabPosition == 1) {
@@ -140,6 +142,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         }
                     }
                 }
+                    } catch (e: Exception) {
+                        Snackbar.make(searchView, "Error", Snackbar.LENGTH_SHORT).show()
+                    }
                 return true
             }
         })
