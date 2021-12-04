@@ -19,6 +19,7 @@ import uz.glight.hobee.distribuition.adapters.MyApplicationsAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentApplicationsBinding
 import uz.glight.hobee.distribuition.utils.NetworkHelper
 import uz.glight.hobee.distribuition.utils.OnItemClickListener
+import uz.glight.hobee.distribuition.utils.internetError
 import uz.glight.hobee.distribuition.viewmodels.MyApplicationsViewModel
 import uz.glight.hobee.ibrogimov.commons.ViewState
 import uz.glight.hobee.ibrogimov.commons.getFragmentTag
@@ -46,7 +47,7 @@ class ApplicationsFragment : Fragment(R.layout.fragment_applications) {
         if (NetworkHelper(requireContext()).isNetworkConnected()) {
             loadData()
         } else {
-            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+            view?.let { it.internetError() }
         }
     }
 

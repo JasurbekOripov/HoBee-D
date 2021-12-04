@@ -22,7 +22,7 @@ interface HobeeAPI {
     suspend fun loginUser(@Body usr: UserLogin): Response<UserModel>
 
 
-    @POST("request-agent/create")
+    @POST("request-mobile/create")
     suspend fun createOrder(
         @Body clinicName: CreateOrderModel
     ): Response<CreatedResponseModel>

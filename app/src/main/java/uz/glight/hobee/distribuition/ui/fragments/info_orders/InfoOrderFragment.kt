@@ -13,6 +13,7 @@ import uz.glight.hobee.distribuition.adapters.OrderMedsAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentInfoOrderBinding
 import uz.glight.hobee.distribuition.network.models.Item
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
 import uz.glight.hobee.distribuition.viewmodels.OrderItemsViewModel
 import java.lang.Exception
 
@@ -48,7 +49,7 @@ class InfoOrderFragment : Fragment() {
         if (NetworkHelper(requireContext()).isNetworkConnected()) {
             loadData()
         } else {
-            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+            view?.let { it.internetError() }
         }
         return root
     }

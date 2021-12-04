@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/card_pharm.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_create_application.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_warehouse.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/spinner_item.xml" value="0.2" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HobeeD/app/src/main/res/drawable-v24/price_tv_back.xml" value="0.1" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HobeeD/app/src/main/res/drawable/et_back.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HobeeD/app/src/main/res/drawable/rounded_full_8.xml" value="0.21614583333333334" />

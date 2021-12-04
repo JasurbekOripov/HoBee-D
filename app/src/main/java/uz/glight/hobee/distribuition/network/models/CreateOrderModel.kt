@@ -12,9 +12,9 @@ data class CreateOrderModel(
     @SerializedName("discount")
     var sale: String?,
     @SerializedName("prepayment")
-    var prepayment: String?,
+    var prepayment: Float?,
     @SerializedName("total_price")
-    val generalPrice: String?,
+    var generalPrice: String?,
     @SerializedName("payment_type")
     var paymentType: String?,
     @SerializedName("list_of_drugs")

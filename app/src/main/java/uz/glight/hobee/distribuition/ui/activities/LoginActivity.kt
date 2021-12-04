@@ -21,6 +21,8 @@ import kotlinx.coroutines.*
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
+import uz.glight.hobee.distribuition.utils.simpleError
 import java.lang.Exception
 
 /**
@@ -69,10 +71,10 @@ class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceC
                 if (NetworkHelper(applicationContext).isNetworkConnected()) {
                     login()
                 } else {
-                    Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show()
+                  it.internetError()
                 }
             } catch (e: Exception) {
-                Snackbar.make(fullName, "Error", Snackbar.LENGTH_SHORT).show()
+                fullName.simpleError("Ошибка")
             }
         }
     }

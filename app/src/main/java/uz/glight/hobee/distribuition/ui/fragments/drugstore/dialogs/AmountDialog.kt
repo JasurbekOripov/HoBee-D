@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.databinding.DialogAmountBinding
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.simpleError
 import java.lang.Exception
 
 class AmountDialog(private val callback: PositiveNegativeCallback) : BottomSheetDialogFragment() {
@@ -63,13 +64,13 @@ class AmountDialog(private val callback: PositiveNegativeCallback) : BottomSheet
                             callback.positive(bkItem)
                             dismiss()
                         } else {
-                            Toast.makeText(requireContext(), "Amount can not be empty", Toast.LENGTH_SHORT).show()
+                            requireView().simpleError("количество не могут быть пустыми")
                         }
                     }
                 }
 
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "error count", Toast.LENGTH_SHORT).show()
+                requireView().simpleError("количество ошибок")
             }
             negativeBtn.setOnClickListener {
                 dismiss()

@@ -13,6 +13,7 @@ import uz.glight.hobee.distribuition.BuildConfig
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.utils.AnimationHelper
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
 
 /**
  *
@@ -78,7 +79,7 @@ class SplashScreen : AppCompatActivity() {
                 }
             }.start()
         } else {
-            Snackbar.make(tx, "No internet connection", Snackbar.LENGTH_SHORT).show()
+            tx.internetError()
         }
 
     }

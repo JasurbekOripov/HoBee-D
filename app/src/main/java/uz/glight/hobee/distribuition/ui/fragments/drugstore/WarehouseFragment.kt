@@ -24,6 +24,8 @@ import uz.glight.hobee.distribuition.ui.activities.LoginActivity
 import uz.glight.hobee.distribuition.ui.fragments.drugstore.dialogs.AmountDialog
 import uz.glight.hobee.distribuition.ui.fragments.drugstore.dialogs.PositiveNegativeCallback
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
+import uz.glight.hobee.distribuition.utils.simpleError
 import uz.glight.hobee.distribuition.viewmodels.WareHouseViewModel
 import uz.glight.hobee.ibrogimov.commons.getFragmentTag
 import java.lang.Exception
@@ -82,7 +84,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 })
             } else {
                 view?.let {
-                    Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show()
+                    it.internetError()
                 }
             }
             false;
@@ -99,11 +101,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     lifecycleScope.launch {
                         var res = RemoteRepository.getDiscounts()
                         if (res.code() > 400) {
-                            Snackbar.make(
-                                view!!,
-                                "You access is failed , please re-enter again",
-                                Snackbar.LENGTH_LONG
-                            ).show()
+                            view?.simpleError("Вам не удалось получить доступ, пожалуйста, повторите вход еще раз")
                             val la = Intent(requireContext(), LoginActivity::class.java)
                             la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(la)
@@ -129,8 +127,9 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 }
 
                     } catch (e: Exception) {
-                        Snackbar.make(searchView, "Error", Snackbar.LENGTH_SHORT).show()
-                    }
+                    view?.simpleError("ошибка")
+
+                }
                 return true
             }
         })

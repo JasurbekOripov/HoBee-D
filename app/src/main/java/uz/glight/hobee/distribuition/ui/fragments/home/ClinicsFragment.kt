@@ -17,6 +17,7 @@ import uz.glight.hobee.distribuition.adapters.ClinicAdapter
 import uz.glight.hobee.distribuition.adapters.ItemsListAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentClinicsBinding
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
 
 class ClinicsFragment : Fragment(R.layout.fragment_clinics) {
     private lateinit var adapter: ClinicAdapter
@@ -44,7 +45,7 @@ class ClinicsFragment : Fragment(R.layout.fragment_clinics) {
         if (NetworkHelper(requireContext()).isNetworkConnected()) {
             loadData()
         } else {
-            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+            view?.let { it.internetError()}
         }
     }
 

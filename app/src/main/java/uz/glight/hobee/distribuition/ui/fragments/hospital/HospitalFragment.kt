@@ -18,6 +18,7 @@ import uz.glight.hobee.distribuition.adapters.DoctorsAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentHospitalBinding
 import uz.glight.hobee.distribuition.network.models.ClinicModel
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
 import uz.glight.hobee.distribuition.viewmodels.DoctorsViewModel
 import uz.glight.hobee.ibrogimov.commons.getFragmentTag
 
@@ -88,7 +89,7 @@ class HospitalFragment : Fragment(R.layout.fragment_hospital) {
         if (NetworkHelper(requireContext()).isNetworkConnected()) {
             loadData()
         } else {
-            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+            view?.let { it.internetError()}
         }
 //        viewModel.viewState.observe(requireParentFragment().viewLifecycleOwner, dataRetriever)
     }

@@ -24,6 +24,8 @@ import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.ui.activities.BottomNavigationActivity
 import uz.glight.hobee.distribuition.ui.activities.LoginActivity
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
+import uz.glight.hobee.distribuition.utils.simpleError
 import java.lang.Exception
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -55,7 +57,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             homeViewModel.getPharmacy("", this)
             homeViewModel.getClinic("", viewLifecycleOwner)
         } else {
-            Snackbar.make(view, "No internet connection", Snackbar.LENGTH_SHORT).show()
+           view.internetError()
         }
     }
 
@@ -79,7 +81,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             } else {
                 view?.let {
-                    Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show()
+                    it.internetError()
                 }
             }
 
@@ -98,11 +100,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     lifecycleScope.launch {
                     var res = RemoteRepository.getDiscounts()
                     if (res.code() > 400) {
-                        Snackbar.make(
-                            view!!,
-                            "You access is failed , please re-enter again",
-                            Snackbar.LENGTH_LONG
-                        ).show()
+                        view?.internetError()
                         val la = Intent(requireContext(), LoginActivity::class.java)
                         la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(la)
@@ -118,11 +116,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         }
                     } else {
                         view?.let {
-                            Snackbar.make(
-                                it,
-                                "No internet connection",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            it.internetError()
                         }
                     }
 
@@ -134,16 +128,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         }
                     } else {
                         view?.let {
-                            Snackbar.make(
-                                it,
-                                "No internet connection",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            it.internetError()
                         }
                     }
                 }
                     } catch (e: Exception) {
-                        Snackbar.make(searchView, "Error", Snackbar.LENGTH_SHORT).show()
+                     searchView.simpleError("ошибка")
                     }
                 return true
             }

@@ -12,9 +12,9 @@ class NetworkChangeListener : BroadcastReceiver() {
         internetConnectionHelper = NetworkHelper(context!!)
         if (!internetConnectionHelper.isNetworkConnected()) {
             val dialog = AlertDialog.Builder(context)
-            dialog.setTitle("Error")
+            dialog.setTitle("Ошибка")
             dialog.setCancelable(false)
-            dialog.setMessage("Please check internet connection or turn on WI-FI")
+            dialog.setMessage("Пожалуйста, проверьте подключение к Интернету или включите WI-FI")
             dialog.setPositiveButton(
                 "OK"
             ) { dialog, _ ->

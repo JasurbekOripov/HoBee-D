@@ -27,6 +27,8 @@ import uz.glight.hobee.distribuition.network.models.ClinicModel
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.ui.activities.BottomNavigationActivity
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
+import uz.glight.hobee.distribuition.utils.simpleError
 import java.lang.Exception
 
 class DashboardFragment : Fragment() {
@@ -55,7 +57,7 @@ class DashboardFragment : Fragment() {
         if (NetworkHelper(requireContext()).isNetworkConnected()) {
             loadData()
         } else {
-            Snackbar.make(requireView(), "No internet connection", Snackbar.LENGTH_SHORT).show()
+            requireView().internetError()
         }
     }
 
@@ -76,7 +78,7 @@ class DashboardFragment : Fragment() {
                 }
             }
         } catch (e: Exception) {
-            Snackbar.make(requireView(), "Error", Snackbar.LENGTH_SHORT).show()
+           requireView().simpleError("Ошибка")
         }
         liveData.observe(viewLifecycleOwner, {
             for (i in liveData.value ?: emptyList()) {
@@ -108,7 +110,7 @@ class DashboardFragment : Fragment() {
             viewProvider.snapshot()
             viewPlacemark.setView(viewProvider)
         } catch (e: Exception) {
-            Snackbar.make(requireView(), "${s.name} Error", Snackbar.LENGTH_SHORT).show()
+            requireView().simpleError("${s.name} Ошибка")
         }
 
     }

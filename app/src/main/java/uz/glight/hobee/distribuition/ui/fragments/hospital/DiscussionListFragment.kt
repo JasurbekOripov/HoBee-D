@@ -17,6 +17,7 @@ import uz.glight.hobee.distribuition.adapters.ItemsListAdapter
 import uz.glight.hobee.distribuition.adapters.ViewHolderFactory
 import uz.glight.hobee.distribuition.databinding.FragmentDiscussionListBinding
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
 import uz.glight.hobee.distribuition.viewmodels.DiscussionListViewModel
 import uz.glight.hobee.ibrogimov.commons.ViewState
 import uz.glight.hobee.ibrogimov.commons.getFragmentTag
@@ -58,7 +59,7 @@ class DiscussionListFragment : Fragment(R.layout.fragment_discussion_list) {
         if (NetworkHelper(requireContext()).isNetworkConnected()) {
             loadData()
         } else {
-            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+            view?.let { it.internetError() }
         }
 //        viewState.observe(viewLifecycleOwner, dataRetriever)
     }

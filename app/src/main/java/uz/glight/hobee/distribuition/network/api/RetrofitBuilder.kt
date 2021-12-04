@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitBuilder {
 
-    private const val BASE_URL = BuildConfig.BASE_URL
+    private const val BASE_URL = "http://distributor.hobee.uz/v1/api/"
 //    private const val BASE_URL = "http://192.168.0.179/v1/api/"    //local base url
 
     private fun getRetrofit(token: String?): Retrofit {

@@ -14,6 +14,7 @@ import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.databinding.FragmentCreateApplicationBinding
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
 import java.lang.Exception
 
 
@@ -76,7 +77,7 @@ class CreateApplicationDialog(private val data: CreateOrderModel, private val cr
                 }
             }
         } else {
-            Snackbar.make(view, "No internet connection", Snackbar.LENGTH_SHORT).show()
+            view.internetError()
         }
     }
 

@@ -35,8 +35,7 @@ import kotlinx.coroutines.launch
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.services.NetworkChangeListener
-import uz.glight.hobee.distribuition.utils.LocationReceiver
-import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.*
 import java.lang.Exception
 
 class BottomNavigationActivity : AppCompatActivity() {
@@ -59,10 +58,10 @@ class BottomNavigationActivity : AppCompatActivity() {
             if (NetworkHelper(applicationContext).isNetworkConnected()) {
                 RemoteRepository.setService(userData?.accessToken!!)
             } else {
-                Snackbar.make(toolbar, "No internet connection", Snackbar.LENGTH_SHORT).show()
+                toolbar.internetError()
             }
         } catch (e: Exception) {
-            Snackbar.make(toolbar, "Error", Snackbar.LENGTH_SHORT).show()
+            toolbar.simpleError("Ошибка")
         }
 
         setSupportActionBar(toolbar)
@@ -87,11 +86,7 @@ class BottomNavigationActivity : AppCompatActivity() {
                     try {
                         var res = RemoteRepository.getDiscounts()
                         if (res.code() > 400) {
-                            Snackbar.make(
-                                navView,
-                                "You access is failed , please re-enter again",
-                                Snackbar.LENGTH_LONG
-                            ).show()
+                            navView.simpleError("Вам не удалось получить доступ, пожалуйста, повторите вход еще раз")
                             Handler(Looper.getMainLooper()).postDelayed({
                                 val la = Intent(applicationContext, LoginActivity::class.java)
                                 la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -101,8 +96,7 @@ class BottomNavigationActivity : AppCompatActivity() {
 
                         }
                     } catch (e: Exception) {
-                        Snackbar.make(navView, "No internet connection", Snackbar.LENGTH_SHORT)
-                            .show()
+                        navView.internetError()
                     }
 
                 }
@@ -112,8 +106,7 @@ class BottomNavigationActivity : AppCompatActivity() {
                     navView.visibility = View.GONE
                 }
             } else {
-                Snackbar.make(navView, "No internet connection", Snackbar.LENGTH_SHORT)
-                    .show()
+                navView.internetError()
             }
 
         }

@@ -20,6 +20,8 @@ import uz.glight.hobee.distribuition.adapters.PharmacyAdapter
 import uz.glight.hobee.distribuition.databinding.FragmentPharmacyBinding
 import uz.glight.hobee.distribuition.utils.NetworkHelper
 import uz.glight.hobee.distribuition.utils.OnItemClickListener
+import uz.glight.hobee.distribuition.utils.internetError
+import uz.glight.hobee.distribuition.utils.simpleError
 import uz.glight.hobee.ibrogimov.commons.ViewState
 import java.lang.Exception
 
@@ -40,7 +42,7 @@ class PharmacyFragment : Fragment(R.layout.fragment_pharmacy) {
                     val bundle = bundleOf("drugstore_id" to data.id, "title" to data.name)
                     findNavController().navigate(R.id.drugStoreFragment, bundle)
                 } catch (e: Exception) {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                   requireView().simpleError()
                 }
             }
 
@@ -53,12 +55,7 @@ class PharmacyFragment : Fragment(R.layout.fragment_pharmacy) {
         if (networkHelper.isNetworkConnected()) {
             loadData()
         } else {
-            Snackbar.make(
-                bindingPharmacy?.listView!!,
-                "No internet connection",
-                Snackbar.LENGTH_SHORT
-            )
-                .show()
+            requireView().internetError()
         }
     }
 

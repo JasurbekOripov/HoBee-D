@@ -18,6 +18,8 @@ import uz.glight.hobee.distribuition.room.AppDataBase
 import uz.glight.hobee.distribuition.room.entity.SavedMedEntity
 import uz.glight.hobee.distribuition.ui.fragments.drugstore.dialogs.CreateApplicationDialog
 import uz.glight.hobee.distribuition.utils.NetworkHelper
+import uz.glight.hobee.distribuition.utils.internetError
+import uz.glight.hobee.distribuition.utils.simpleError
 import java.lang.Exception
 
 class BasketFragment : Fragment(R.layout.fragment_basket) {
@@ -56,7 +58,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
                 adapter.notifyItemRemoved(position)
                 list.remove(savedMedEntity)
                 adapter.notifyItemRangeRemoved(position, list.size)
-                Snackbar.make(view!!,"${savedMedEntity.name} is deleted",Snackbar.LENGTH_SHORT).show()
+                view?.simpleError("${savedMedEntity.name} удалён")
             }
         })
         binding.listView.adapter = adapter
@@ -78,7 +80,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
                 )
             }
         } catch (e: Exception) {
-            Snackbar.make(requireView(), "Creating error", Snackbar.LENGTH_SHORT).show()
+            requireView().simpleError("Создание ошибки")
         }
         binding.goToCreating.setOnClickListener {
             if (list.isNotEmpty()) {
@@ -97,11 +99,9 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
                     bundleOf("data" to createData, "id" to where_house_id)
                 )
             } else {
-                Snackbar.make(
-                    view ?: View(requireContext()),
-                    "Basket is empty",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+
+                requireView().simpleError("Корзина пуста")
+
             }
         }
 
@@ -117,7 +117,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         if (NetworkHelper(requireContext()).isNetworkConnected()) {
             loadData()
         } else {
-            view?.let { Snackbar.make(it, "No internet connection", Snackbar.LENGTH_SHORT).show() }
+            view?.internetError()
         }
     }
 
