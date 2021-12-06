@@ -73,7 +73,7 @@ class LocationReceiver : BroadcastReceiver() {
                                     Log.d("TAG", "getDeviceLocationBearing: ${lastKnownLocation?.bearing?:0F}")
                                     bearnig = lastKnownLocation?.bearing ?: 0F
                                 }
-                                if (currentTime - lastTime > 30000) {
+                                if (currentTime - lastTime > 10000) {
                                     lastTime = currentTime
                                     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                                     val currentDateandTime: String = sdf.format(Date())

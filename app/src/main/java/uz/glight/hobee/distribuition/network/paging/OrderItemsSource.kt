@@ -19,7 +19,7 @@ class OrderItemsSource(var id: Int) : PagingSource<Int, Item>() {
 
         if(totalPage==-1||totalPage>pageNumber){
             pageNumber = params.key ?: 1
-            var res = RemoteRepository.getRespons("http://83.69.136.134/v1/api/request-agent-items?request_agent_id=${id}&per-page25&page=${pageNumber}")
+            var res = RemoteRepository.getRespons("http://distributor.hobee.uz/v1/api/request-mobile-items?request_mobile_id=${id}&per-page25&page=${pageNumber}")
         var headers = res.headers()
             if (totalPage==-1){
                 for (i in headers) {

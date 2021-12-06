@@ -59,7 +59,7 @@ interface HobeeAPI {
         @Query("per-page") perPage: Int = 25,
     ): Response<List<DiscussionModel>>                                           //ready
 
-    @GET("request-agent")
+    @GET("request-mobile")
     suspend fun getApplicationsList(
         @Query("page") page: Int,
         @Query("per-page") perPage: Int = 30,
