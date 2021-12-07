@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="uz.glight.hobee.distribuition">
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -36,7 +35,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".utils.LocationReceiver"
+            android:name=".utils.MyLocationHelper"
             android:enabled="true"
             android:exported="true" />
         <activity

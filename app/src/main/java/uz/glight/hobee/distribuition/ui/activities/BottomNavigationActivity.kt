@@ -148,8 +148,11 @@ class BottomNavigationActivity : AppCompatActivity() {
         getLocationPermission()
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         if (locationPermissionGranted) {
-            var service: BroadcastReceiver = LocationReceiver()
-            registerReceiver(service, filter)
+            val filterL = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
+                addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+            }
+            var service: BroadcastReceiver = MyLocationHelper()
+            registerReceiver(service, filterL)
         }
         registerReceiver(br, filter)
     }
