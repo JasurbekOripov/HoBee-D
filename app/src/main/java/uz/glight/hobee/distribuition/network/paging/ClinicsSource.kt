@@ -18,7 +18,7 @@ class ClinicsSource( var name: String) : PagingSource<Int, ClinicModel>() {
         try {
 
         if(totalPage==-1||totalPage>pageNumber){
-            var pageNumber = params.key ?: 1
+             pageNumber = params.key ?: 1
             var res = RemoteRepository.getClinic(name,pageNumber)
             var headers = res.headers()
 
