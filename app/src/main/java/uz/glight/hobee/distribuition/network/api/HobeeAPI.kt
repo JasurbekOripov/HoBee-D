@@ -56,6 +56,7 @@ interface HobeeAPI {
     @GET("discussions")
     suspend fun getDiscussionList(
         @Query("page") page: Int,
+        @Query("clinic_id") id: String,
         @Query("per-page") perPage: Int = 25,
     ): Response<List<DiscussionModel>>                                           //ready
 

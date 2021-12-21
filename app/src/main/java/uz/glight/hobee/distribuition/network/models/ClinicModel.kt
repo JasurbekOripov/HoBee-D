@@ -10,7 +10,7 @@ data class ClinicModel(
     @SerializedName("name")
     val name: String?,
     @SerializedName("address")
-    val address: String?,
+    var address: String?,
     @SerializedName("reception_phone")
     val receptionPhone: String?,
     var latitude: Double,

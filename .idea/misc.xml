@@ -3,14 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/drawable/ic_image_placeholder.xml" value="0.2128205128205128" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/card_doctor.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/card_drug.xml" value="0.17222222222222222" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/card_order.xml" value="0.2" />
-        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/card_pharm.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/card_pharm.xml" value="0.18" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_application_info.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_applications.xml" value="0.2" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_create_application.xml" value="0.2" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_dashboard.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_hospital.xml" value="0.16944444444444445" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_info_order.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_pharmacy.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_record.xml" value="0.11041666666666666" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/fragment_warehouse.xml" value="0.2" />
+        <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/location_layer.xml" value="0.9" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HoBee-D/app/src/main/res/layout/spinner_item.xml" value="0.2" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HobeeD/app/src/main/res/drawable-v24/price_tv_back.xml" value="0.1" />
         <entry key="..\:/Users/7777/AndroidStudioProjects/HobeeD/app/src/main/res/drawable/et_back.xml" value="0.21614583333333334" />

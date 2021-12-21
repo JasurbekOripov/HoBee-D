@@ -16,7 +16,14 @@ class PharmacyAdapter(var itemClick: setOnClick) :
         fun onBind(data: ClinicModel, position: Int) {
             item.apply {
                 cardTitle.text = data.name
-                address.text = data.address
+
+                address.text =if (data.address?.length?:0>30) {
+                    data.address=
+                        data.address?.length?.minus(27)
+                            ?.let { data.address?.subSequence(it, data.address!!.length ).toString() }
+                    var index=data.address?.indexOf(" ")?:0
+                    data.address?.subSequence(index, data.address!!.length )}
+                else  data.address
                 phone.text = data.receptionPhone
                 inn.visibility = View.GONE
                 innTitle.visibility = View.GONE

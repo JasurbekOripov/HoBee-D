@@ -23,15 +23,18 @@ import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MyLocationHelper:BroadcastReceiver() {
+class MyLocationHelper : BroadcastReceiver() {
     var lastTime = 0L
     lateinit var networkHelper: NetworkHelper
     val userData =
         ModelPreferencesManager.get<UserModel>(ModelPreferencesManager.PREFERENCES_FILE_NAME)
+
     override fun onReceive(context: Context, intent: Intent?) {
         networkHelper = NetworkHelper(context)
-        val locationTracker = LocationTracker( 1000,
-            10f, shouldUseGPS = true, shouldUseNetwork = true, shouldUsePassive = true)
+        val locationTracker = LocationTracker(
+            2500,
+            100f, shouldUseGPS = true, shouldUseNetwork = true, shouldUsePassive = true
+        )
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -42,24 +45,26 @@ class MyLocationHelper:BroadcastReceiver() {
         ) {
             locationTracker.startListening(context)
         }
-        locationTracker.addListener(object: LocationTracker.Listener {
+        locationTracker.addListener(object : LocationTracker.Listener {
 
             @SuppressLint("SimpleDateFormat")
             override fun onLocationFound(location: Location) {
                 Log.d("TAG", "onLocationFound:${location} ")
                 var currentTime = System.currentTimeMillis()
                 try {
+                    if (currentTime - lastTime > 2500) {
                     if (networkHelper.isNetworkConnected()) {
-                        var bearnig = 0F
-                        if (location.hasBearing()) {
-                            bearnig = location.bearing
-                        }
-                        if (currentTime - lastTime > 1000) {
+                            var bearnig = 0F
+                            if (location.hasBearing()) {
+                                bearnig = location.bearing
+                            }
                             lastTime = currentTime
                             val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                             val currentDateandTime: String = sdf.format(Date())
-                                        Log.d("TAGLoc06", "getDeviceLocationReal:lat ${location.latitude} " +
-                                                " long  ${location.longitude}")
+                            Log.d(
+                                "TAGLoc06", "location worked:lat ${location.latitude} " +
+                                        " long  ${location.longitude}"
+                            )
                             var res = RemoteRepository.sendLocation(
                                 UserLocation(
                                     bearing = bearnig,
@@ -70,41 +75,41 @@ class MyLocationHelper:BroadcastReceiver() {
                                     agent_id = userData?.id ?: 1
                                 )
                             )
-                                        res.enqueue(object : Callback<LocationResponse> {
-                                            override fun onResponse(
-                                                call: Call<LocationResponse>,
-                                                response: Response<LocationResponse>
-                                            ) {
-                                                if (!response.isSuccessful || response.code() > 400) {
-                                                    Toast.makeText(
-                                                        context,
-                                                        response.message().toString(),
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
+                            res.enqueue(object : Callback<LocationResponse> {
+                                override fun onResponse(
+                                    call: Call<LocationResponse>,
+                                    response: Response<LocationResponse>
+                                ) {
+                                    if (!response.isSuccessful || response.code() > 400) {
+                                        Toast.makeText(
+                                            context,
+                                            response.message().toString(),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
 
-                                            }
+                                }
 
-                                            override fun onFailure(
-                                                call: Call<LocationResponse>,
-                                                t: Throwable
-                                            ) {
+                                override fun onFailure(
+                                    call: Call<LocationResponse>,
+                                    t: Throwable
+                                ) {
 
-                                                Toast.makeText(
-                                                    context,
-                                                    t.message.toString(),
-                                                    Toast.LENGTH_SHORT
-                                                )
-                                                    .show()
-                                            }
-                                        })
+                                    Toast.makeText(
+                                        context,
+                                        t.message.toString(),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+                            })
 
                         }
-                        onReceive(context,intent)
+                        onReceive(context, intent)
                     }
                 } catch (e: Exception) {
 //                    Toast.makeText(context, "Error with GPS please check internet adn GPS" , Toast.LENGTH_SHORT).show()
-                    Toast.makeText(context, " ${e.message}" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, " ${e.message}", Toast.LENGTH_SHORT).show()
                     Log.d("TAG", "onError: ${e.message}")
                 }
             }

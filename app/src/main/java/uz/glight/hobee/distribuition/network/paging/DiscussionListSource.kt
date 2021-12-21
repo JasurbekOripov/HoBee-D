@@ -7,7 +7,7 @@ import com.google.android.material.snackbar.Snackbar
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import java.lang.Exception
 
-class DiscussionListSource() : PagingSource<Int, DiscussionModel>() {
+class DiscussionListSource(var id:String) : PagingSource<Int, DiscussionModel>() {
     override fun getRefreshKey(state: PagingState<Int, DiscussionModel>): Int? {
         return state.anchorPosition
     }
@@ -18,7 +18,7 @@ class DiscussionListSource() : PagingSource<Int, DiscussionModel>() {
         try {
         if(totalPage==-1||totalPage>pageNumber){
              pageNumber = params.key ?: 1
-            var res = RemoteRepository.getDiscussionList(pageNumber)
+            var res = RemoteRepository.getDiscussionList(pageNumber, id = id)
         var headers = res.headers()
             if (totalPage==-1){
                 for (i in headers) {

@@ -16,6 +16,7 @@ import com.glight.hobeedistribuition.utils.Constants
 import com.glight.hobeedistribuition.utils.ModelPreferencesManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.adapters.TabPagesAdapter
@@ -53,12 +54,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         TabLayoutMediator(binding.tab, binding.pages) { tab, position ->
             tab.text = Constants.MAIN_TABS[position]
         }.attach()
+        lifecycleScope.launch(Dispatchers.IO) {
         if (networkHelper.isNetworkConnected()) {
-            homeViewModel.getPharmacy("", this)
+            homeViewModel.getPharmacy("", viewLifecycleOwner)
             homeViewModel.getClinic("", viewLifecycleOwner)
         } else {
            view.internetError()
-        }
+        }}
     }
 
     override fun onDestroyView() {
@@ -97,7 +99,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             override fun onQueryTextChange(newText: String?): Boolean {
                 try {
                 if (networkHelper.isNetworkConnected()) {
-                    lifecycleScope.launch {
+                    lifecycleScope.launch(Dispatchers.IO) {
                     var res = RemoteRepository.getDiscounts()
                     if (res.code() > 400) {
                         view?.internetError()

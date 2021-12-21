@@ -86,11 +86,11 @@ class RecordService : Service() {
             defaultFolder.absolutePath
         }
 
-        currFilePath = "$baseFolder/${getCurrentFormattedDateTime()}.3gp"
+        currFilePath = "$baseFolder/${getCurrentFormattedDateTime()}.mp3"
         recorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
-            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setAudioEncodingBitRate(128000)
             setAudioSamplingRate(44100)
 
@@ -141,7 +141,7 @@ class RecordService : Service() {
 //                    } else {
 //                        addFileInLegacyMediaStore()
 //                    }
-                    EventBus.getDefault().post(RecordEvents.RecordingCompleted())
+                EventBus.getDefault().post(RecordEvents.RecordingCompleted())
 //                }
             } catch (e: Exception) {
                 showErrorToast(e)
@@ -181,13 +181,14 @@ class RecordService : Service() {
 
     @SuppressLint("InlinedApi")
     private fun addFileInNewMediaStore() {
-        val audioCollection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        val audioCollection =
+            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         val storeFilename = currFilePath.getFilenameFromPath()
 
         val newSongDetails = ContentValues().apply {
             put(MediaStore.Audio.Media.DISPLAY_NAME, storeFilename)
             put(MediaStore.Audio.Media.TITLE, storeFilename)
-            put(MediaStore.Audio.Media.MIME_TYPE, storeFilename.getMimeType())
+            put(MediaStore.Audio.Media.MIME_TYPE, "audio/mpeg")
             put(MediaStore.Audio.Media.RELATIVE_PATH, currFilePath)
         }
 
@@ -257,7 +258,8 @@ class RecordService : Service() {
             }
         }
 
-        var priority = if (isOreoPlus()) NotificationManager.IMPORTANCE_DEFAULT else NotificationCompat.PRIORITY_DEFAULT
+        var priority =
+            if (isOreoPlus()) NotificationManager.IMPORTANCE_DEFAULT else NotificationCompat.PRIORITY_DEFAULT
         var icon = R.drawable.circle_white
         var title = label
         var visibility = NotificationCompat.VISIBILITY_PUBLIC
@@ -297,7 +299,8 @@ class RecordService : Service() {
     }
 
     private fun getOpenAppIntent(): PendingIntent {
-        val intent = getLaunchIntent(BuildConfig.APPLICATION_ID) ?: Intent(this, SplashScreen::class.java)
+        val intent =
+            getLaunchIntent(BuildConfig.APPLICATION_ID) ?: Intent(this, SplashScreen::class.java)
         return PendingIntent.getActivity(
             this,
             RECORDER_RUNNING_NOTIF_ID,
@@ -323,15 +326,18 @@ class RecordService : Service() {
         try {
             val map: MutableMap<String, RequestBody> = HashMap<String, RequestBody>();
 
-            val fileBody: RequestBody = file.asRequestBody("audio/*".toMediaTypeOrNull());
+            val fileBody: RequestBody = file.asRequestBody("audio/mpeg".toMediaTypeOrNull());
             map.put("file\"; filename=\"${currFilePath.getFilenameFromPath()}\"", fileBody);
-            map.put("discussion_date", RemoteRepository.toRequestBody(getCurrentFormattedDateTime()));
+            map.put(
+                "discussion_date",
+                RemoteRepository.toRequestBody(getCurrentFormattedDateTime())
+            );
             map.put("doctor_id", RemoteRepository.toRequestBody(id.toString()));
 
 
             job?.launch {
                 val res = RemoteRepository.sendRecord(map)
-                if (res.isSuccessful){
+                if (res.isSuccessful) {
                     file.delete()
                 }
             }

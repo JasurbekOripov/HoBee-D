@@ -9,9 +9,9 @@ import androidx.paging.cachedIn
 import uz.glight.hobee.distribuition.network.paging.DiscussionListSource
 
 class DiscussionListViewModel : ViewModel() {
-    fun getData() =
+    fun getData(id: String) =
         Pager(PagingConfig(pageSize = 25)) {
-            DiscussionListSource()
+            DiscussionListSource(id)
         }.flow.cachedIn(viewModelScope).asLiveData()
 
 }

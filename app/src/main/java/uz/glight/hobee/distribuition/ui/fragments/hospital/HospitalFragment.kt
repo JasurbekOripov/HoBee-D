@@ -36,12 +36,16 @@ class HospitalFragment : Fragment(R.layout.fragment_hospital) {
         viewModel = ViewModelProvider(this)[DoctorsViewModel::class.java]
         adapter = DoctorsAdapter(object : DoctorsAdapter.setOnClick {
             override fun itemClick(item: DoctorModel, position: Int) {
-
+                findNavController().navigate(R.id.doctorFragment, bundleOf(Pair("doctor", item)))
             }
         })
         binding.listView.adapter = adapter
+        val clinic = requireArguments().getSerializable("clinic") as ClinicModel
         binding.extendedFab.setOnClickListener {
-            findNavController().navigate(R.id.to_discussion_list)
+            findNavController().navigate(
+                R.id.to_discussion_list,
+                bundleOf(Pair("clinic_id", clinic.id.toString()))
+            )
         }
     }
 
@@ -89,7 +93,7 @@ class HospitalFragment : Fragment(R.layout.fragment_hospital) {
         if (NetworkHelper(requireContext()).isNetworkConnected()) {
             loadData()
         } else {
-            view?.let { it.internetError()}
+            view?.let { it.internetError() }
         }
 //        viewModel.viewState.observe(requireParentFragment().viewLifecycleOwner, dataRetriever)
     }

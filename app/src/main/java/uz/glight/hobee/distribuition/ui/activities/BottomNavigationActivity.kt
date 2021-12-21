@@ -31,6 +31,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
@@ -40,6 +41,7 @@ import java.lang.Exception
 
 class BottomNavigationActivity : AppCompatActivity() {
     val br: BroadcastReceiver = NetworkChangeListener()
+    var service: BroadcastReceiver = MyLocationHelper()
     private var locationPermissionGranted = false
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var lastKnownLocation: Location? = null
@@ -61,7 +63,13 @@ class BottomNavigationActivity : AppCompatActivity() {
                 toolbar.internetError()
             }
         } catch (e: Exception) {
-            toolbar.simpleError("Ошибка")
+            toolbar.simpleError("Вам не удалось получить доступ, пожалуйста, повторите вход еще раз")
+            Handler(Looper.getMainLooper()).postDelayed({
+                val la = Intent(applicationContext, BottomNavigationActivity::class.java)
+                la.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(la)
+                finish()
+            }, 1500)
         }
 
         setSupportActionBar(toolbar)
@@ -82,7 +90,7 @@ class BottomNavigationActivity : AppCompatActivity() {
          */
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (NetworkHelper(applicationContext).isNetworkConnected()) {
-                lifecycleScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     try {
                         var res = RemoteRepository.getDiscounts()
                         if (res.code() > 400) {
@@ -151,10 +159,14 @@ class BottomNavigationActivity : AppCompatActivity() {
             val filterL = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
                 addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
             }
-            var service: BroadcastReceiver = MyLocationHelper()
             registerReceiver(service, filterL)
         }
         registerReceiver(br, filter)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        service.abortBroadcast()
     }
 
     override fun onRequestPermissionsResult(

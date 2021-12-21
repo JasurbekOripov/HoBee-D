@@ -86,8 +86,8 @@ object RemoteRepository {
         return service.getDoctors(clinic_id, page, name)
     }
 
-    suspend fun getDiscussionList(page: Int): Response<List<DiscussionModel>> {
-        return service.getDiscussionList(page)
+    suspend fun getDiscussionList(page: Int,id:String): Response<List<DiscussionModel>> {
+        return service.getDiscussionList(page, id = id)
     }
 
     suspend fun getApplicationsList(page: Int): Response<List<OrderModel>> {

@@ -44,84 +44,84 @@ class LocationReceiver : BroadcastReceiver() {
     fun getDeviceLocation(context: Context) {
         var currentTime = System.currentTimeMillis()
         try {
-                if (ActivityCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    Log.d("TAGLoc06", "getDeviceLocation: not equal worked")
-                    Toast.makeText(
-                        context,
-                        "Permissions denied please accept them ! ",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
-                val locationResult = FusedLocationProviderClient(context).lastLocation
-                locationResult.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        if (it.result != null) {
-                            if (networkHelper.isNetworkConnected()) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d("TAGLoc06", "getDeviceLocation: not equal worked")
+                Toast.makeText(
+                    context,
+                    "Permissions denied please accept them ! ",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+            val locationResult = FusedLocationProviderClient(context).lastLocation
+            locationResult.addOnCompleteListener {
+                if (currentTime - lastTime > 2500) {
+                    if (networkHelper.isNetworkConnected()) {
+                        if (it.isSuccessful) {
+                            if (it.result != null) {
                                 var bearnig = 0F
                                 if (it.result.hasBearing()) {
                                     bearnig = it.result?.bearing ?: 0F
                                 }
-                                if (currentTime - lastTime > 1000) {
-                                    lastTime = currentTime
-                                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                                    val currentDateandTime: String = sdf.format(Date())
-                                    Log.d("TAGLoc06", "getDeviceLocationReal:lat ${it.result?.latitude} " +
-                                            " long  ${it.result?.longitude}")
-                                    var res = RemoteRepository.sendLocation(
-                                        UserLocation(
-                                            bearing = bearnig,
-                                            datetime = currentDateandTime,
-                                            latitude = it.result?.latitude ?: 0.0,
-                                            longitude = it.result?.longitude ?: 0.0,
-                                            bearing_accuracy = 0F,
-                                            agent_id = userData?.id ?: 1
-                                        )
+                                lastTime = currentTime
+                                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                val currentDateandTime: String = sdf.format(Date())
+                                Log.d(
+                                    "TAGLoc06",
+                                    "getDeviceLocationReal:lat ${it.result?.latitude} " +
+                                            " long  ${it.result?.longitude}"
+                                )
+                                var res = RemoteRepository.sendLocation(
+                                    UserLocation(
+                                        bearing = bearnig,
+                                        datetime = currentDateandTime,
+                                        latitude = it.result?.latitude ?: 0.0,
+                                        longitude = it.result?.longitude ?: 0.0,
+                                        bearing_accuracy = 0F,
+                                        agent_id = userData?.id ?: 1
                                     )
-                                    res.enqueue(object : Callback<LocationResponse> {
-                                        override fun onResponse(
-                                            call: Call<LocationResponse>,
-                                            response: Response<LocationResponse>
-                                        ) {
-                                            if (!response.isSuccessful || response.code() > 400) {
-                                                Toast.makeText(
-                                                    context,
-                                                    response.message().toString(),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-
-                                        }
-
-                                        override fun onFailure(
-                                            call: Call<LocationResponse>,
-                                            t: Throwable
-                                        ) {
-
+                                )
+                                res.enqueue(object : Callback<LocationResponse> {
+                                    override fun onResponse(
+                                        call: Call<LocationResponse>,
+                                        response: Response<LocationResponse>
+                                    ) {
+                                        if (!response.isSuccessful || response.code() > 400) {
                                             Toast.makeText(
                                                 context,
-                                                t.message.toString(),
+                                                response.message().toString(),
                                                 Toast.LENGTH_SHORT
-                                            )
-                                                .show()
+                                            ).show()
                                         }
-                                    })
-                                    Log.d("TAGLoc06", "location catch:${it.result} ")
-                                }
+
+                                    }
+
+                                    override fun onFailure(
+                                        call: Call<LocationResponse>,
+                                        t: Throwable
+                                    ) {
+
+                                        Toast.makeText(
+                                            context,
+                                            t.message.toString(),
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                    }
+                                })
+                                Log.d("TAGLoc06", "location catch:${it.result} ")
                             }
                         }
                     }
-                    getDeviceLocation(context)
                 }
-            locationResult.addOnSuccessListener {
-                Log.d("TAG", "getDeviceLocationSuccess:${it} ")
+                getDeviceLocation(context)
             }
         } catch (e: Exception) {
             Snackbar.make(

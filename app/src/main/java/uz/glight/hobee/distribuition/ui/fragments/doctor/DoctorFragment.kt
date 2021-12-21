@@ -40,9 +40,9 @@ class DoctorFragment : Fragment(R.layout.fragment_doctor) {
                 val intent = Intent(Intent.ACTION_DIAL).apply {
                     data = Uri.parse("tel:${doctor.phone}")
                 }
-                if (intent.resolveActivity(requireContext().packageManager) != null) {
+//                if (intent.resolveActivity(requireContext().packageManager) != null) {
                     startActivity(intent)
-                }
+//                }
             } else {
                 context?.toast("Номер телефона не указан!")
             }

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -23,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uz.glight.hobee.distribuition.R
 import uz.glight.hobee.distribuition.databinding.FragmentDashboardBinding
+import uz.glight.hobee.distribuition.databinding.LocationLayerBinding
 import uz.glight.hobee.distribuition.network.models.ClinicModel
 import uz.glight.hobee.distribuition.network.repository.RemoteRepository
 import uz.glight.hobee.distribuition.ui.activities.BottomNavigationActivity
@@ -35,7 +37,7 @@ class DashboardFragment : Fragment() {
     lateinit var mapView: MapView
     var defaultPoint = Point(41.311081, 69.240562)
     lateinit var binding: FragmentDashboardBinding
-
+lateinit var container2:ViewGroup
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,6 +45,9 @@ class DashboardFragment : Fragment() {
     ): View {
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
         MapKitFactory.initialize(requireContext())
+        if (container != null) {
+            container2=container
+        }
         val root = binding.root
         mapView = binding.mapView
         mapView.map.move(
@@ -90,21 +95,10 @@ class DashboardFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setText(s: ClinicModel) {
-        var pharmacyNametv = TextView(requireContext())
-        var params = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        var pharmacyNametv = LocationLayerBinding.inflate(layoutInflater,container2,false)
         try {
-            val drawble =
-                (activity as BottomNavigationActivity).getDrawable(R.drawable.price_tv_back)
-            pharmacyNametv.background = drawble
-            pharmacyNametv.layoutParams = params
-            pharmacyNametv.text = s.name
-            pharmacyNametv.setPadding(15, 7, 15, 7)
-            pharmacyNametv.setTextColor(Color.WHITE)
-            pharmacyNametv.setTypeface(null, Typeface.BOLD);
-            val viewProvider = ViewProvider(pharmacyNametv)
+            pharmacyNametv.tvMarker.text = s.name
+            val viewProvider = ViewProvider(pharmacyNametv.laynerRoot)
             val viewPlacemark: PlacemarkMapObject =
                 mapView.map.mapObjects.addPlacemark(Point(s.latitude, s.longitude), viewProvider)
             viewProvider.snapshot()

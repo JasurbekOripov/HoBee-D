@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:id="@+id/layner_root"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_marker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/price_tv_back"
+        android:gravity="center"
+        android:paddingLeft="@dimen/_7sdp"
+        android:paddingTop="@dimen/_2sdp"
+        android:paddingRight="@dimen/_7sdp"
+        android:paddingBottom="@dimen/_2sdp"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10sdp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_gravity="center"
+        android:src="@drawable/red_loc" />
+</androidx.appcompat.widget.LinearLayoutCompat>

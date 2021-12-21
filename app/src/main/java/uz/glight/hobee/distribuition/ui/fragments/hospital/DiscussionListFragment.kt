@@ -65,7 +65,8 @@ class DiscussionListFragment : Fragment(R.layout.fragment_discussion_list) {
     }
 
     private fun loadData() {
-        viewModel.getData().observe(viewLifecycleOwner, {
+        var id=arguments?.getString("clinic_id")
+        viewModel.getData(id.toString()).observe(viewLifecycleOwner, {
             lifecycleScope.launchWhenCreated {
                 adapter.submitData(it)
             }
